@@ -52,13 +52,12 @@ Another option is cloning this Git repo and running the projects manually. I use
 - Type: `npm run dev`
 ### Run Tests
 - Type: `npm run coverage`
-- 
+  
 ## To run the backend
 To run the backend you can either use an IDE and run the main method or use docker:
 ### Clone the Repository
 - `git clone <repository-url>`
 - `cd <repository-directory>`
-
 
 ## Using Docker 
 ### Build the Docker image
