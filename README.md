@@ -41,7 +41,7 @@ To begin with, I have deployed my application to the cloud, I used Netlify to de
 
 Another option is cloning this Git repo and running the projects manually. I used VSCode to develop the frontend and IntelliJ to develop the backend.
 
-To run the frontend:
+## To run the frontend:
 ### Clone the Repository
 - `git clone <repository-url>`
 - `cd <repository-directory>`
@@ -52,11 +52,13 @@ To run the frontend:
 - Type: `npm run dev`
 ### Run Tests
 - Type: `npm run coverage`
-
+- 
+## To run the backend
 To run the backend you can either use an IDE and run the main method or use docker:
 ### Clone the Repository
 - `git clone <repository-url>`
 - `cd <repository-directory>`
+
 
 ## Using Docker 
 ### Build the Docker image
