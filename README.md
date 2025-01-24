@@ -42,7 +42,7 @@ You can use my application in a couple of ways.
 ## Using the website
 To begin with, I have deployed my application to the cloud, I used Netlify to deploy the frontend and, I used Docker to containerise my backend to deploy on Render. 
 
-This is the link: [webapp](https://thegymgoerapp.netlify.app). 
+This is the link: [TheGymGoersApp](https://thegymgoerapp.netlify.app). 
 
 I am using a free tier for the cloud services so the backend server spins down after a period of no use, so when accessing the website you will potentially have to wait a couple of minutes for the services to start functioning.
 
