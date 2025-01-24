@@ -37,11 +37,18 @@ Draft - React Frontend, Spring Boot backend, MongoDB Database, using rest contro
 
 You can use my application in a couple of ways.
 
-To begin with, I have deployed my application to the cloud, I used Netlify to deploy the frontend and, I used Docker to containerise my backend to deploy on Render. This is the link: [webapp](https://thegymgoerapp.netlify.app). I am using a free tier for the cloud services so the backend server spins down after a period of no use, so when accessing the website you will potentially have to wait a couple of minutes for the services to start functioning.
+
+
+## Using the website
+To begin with, I have deployed my application to the cloud, I used Netlify to deploy the frontend and, I used Docker to containerise my backend to deploy on Render. 
+
+This is the link: https://thegymgoerapp.netlify.app 
+
+I am using a free tier for the cloud services so the backend server spins down after a period of no use, so when accessing the website you will potentially have to wait a couple of minutes for the services to start functioning.
+
 
 Another option is cloning this Git repo and running the projects manually. I used VSCode to develop the frontend and IntelliJ to develop the backend.
-
-To run the frontend:
+## To run the frontend:
 ### Clone the Repository
 - `git clone <repository-url>`
 - `cd <repository-directory>`
@@ -52,7 +59,8 @@ To run the frontend:
 - Type: `npm run dev`
 ### Run Tests
 - Type: `npm run coverage`
-
+  
+## To run the backend
 To run the backend you can either use an IDE and run the main method or use docker:
 ### Clone the Repository
 - `git clone <repository-url>`
