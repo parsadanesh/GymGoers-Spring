@@ -33,7 +33,7 @@ Built with the following dependencies: Spring Web, Rest Repositories, Spring Sec
 
 ### Project Architecture
 
-![Project's Architecture]([https://assets.digitalocean.com/articles/alligator/boo.svg](https://github.com/parsadanesh/GymGoers-Spring/blob/main/Docs/BackendArchitecureDiagram.JPG) "a title")
+![Architecture Diagram](https://github.com/parsadanesh/GymGoers-Spring/blob/main/Docs/BackendArchitecureDiagram.JPG)
 
 
 
