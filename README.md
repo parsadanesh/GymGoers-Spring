@@ -17,7 +17,7 @@ This is a Java and Spring boot implementation of The Gymgoers backend.
 
 In July I created my first full-stack project, I made an application called [The GymGoers](https://github.com/parsadanesh/TheGymGoers/blob/main/ProjectREADME.md) and I did this using the `MERN` stack (`MongoDB`, `ExpressJS`, `ReactJS`, `NodeJS`).
 
-Recently, I was given the opportunity to create and showcase a project using Java and Spring. With this project I aim to use `Spring` and `Java` to develop a new backend system for my GymGoers app, my goal is to use the same frontend and database, swapping the old backend created using the MERN stack with a new backend that uses Spring. In the end, since both systems use a REST API and the same routes, the new backend, once developed, should connect seamlessly with the existing frontend and database and the transition should be smooth for those using the app (They should not notice the difference).
+Recently, I was given the opportunity to create and showcase a project using Java and Spring. With this project I aim to use `Spring` and `Java` to develop a new backend system for my GymGoers app, my goal is to use the same frontend and database, swapping the old backend created using the MERN stack with a new backend that uses Spring. In the end, since both systems use a REST API and the same routes, the new backend, once developed, should connect seamlessly with the existing frontend and database and the transition should be smooth for those using the app (They should not notice the difference when using the app).
 
 This project is a `Java` and `Spring` implementation of the backend for my app, 'The GymGoers`.
 
@@ -35,17 +35,24 @@ Built with the following dependencies: Spring Web, Rest Repositories, Spring Sec
 
 ![Architecture Diagram](https://github.com/parsadanesh/GymGoers-Spring/blob/main/Docs/BackendArchitecureDiagram.JPG)
 
-
-
 ### Server Architecture
 
 Draft - React Frontend, Spring Boot backend, MongoDB Database, using rest controllers HTTP request my from the frontend are handled. The controllers are different so depending on the type of request and the payload the request is routed to a specific controller method. That method talks to the service class which communicates with the repository interface which implements the mongoDB repository using spring boot dependence.
 
+### Routing 
+One benefit I found of doing a remigration is that I was able to use the routes from my previous backend, I was able to use these previous routes to guide me when developing the system using Spring and helped me when creating my controllers, services and the methods in them. Some changes between the two implementations have been made and these have been due to improving aspects of the previous implementation, such as the way I send the data across with the requests.
+
+### User Stories
+
+### Testing
+
+A massive part of this project has been testing. Since the majority of the workload came from the backend I focused on using test-driven development to develop the user stories and the features of the application. For each user story, I created a set of tests that I could implement, I started with the controllers and used Mockito is mock the responses from the services classes. After that, I worked on testing the services and I used Mockito to mock the interactions with the repositories.
+
+
+
 ## Running The App
 
 You can use my application in a couple of ways.
-
-
 
 ## Using the website
 To begin with, I have deployed my application to the cloud, I used Netlify to deploy the frontend and, I used Docker to containerise my backend to deploy on Render. 
@@ -85,3 +92,5 @@ To run the backend you can either use an IDE and run the main method or use dock
 - `mvn clean install`
 ### Run the Application
 - `mvn spring-boot:run`
+
+## Project Review and Future Fetures
