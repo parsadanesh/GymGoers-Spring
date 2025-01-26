@@ -53,7 +53,7 @@ One benefit I found of doing a remigration is that I was able to use the routes 
 
 ### Testing
 
-A massive part of this project has been testing. Since the majority of the workload came from the backend I focused on using test-driven development to develop the user stories and the features of the application. For each user story, I created a set of tests that I could implement, I started with the controllers and used Mockito is mock the responses from the services classes. After that, I worked on testing the services and I used Mockito to mock the interactions with the repositories.
+A massive part of this project has been testing. Since the majority of the workload came from the backend I focused on using test-driven development to develop the user stories and the features of the application. For each user story, I created a set of tests that I could implement, I started with the controllers and used Mockito is mock the responses from the services classes. After that, I worked on testing the services and I used Mockito to mock the interactions with the repositories. One area I did not use TDD for development was the authentication for the sign-in and sign-up up and it is because I followed a JWT authentication guide recommended by another software engineer, it was my first time implementing JWT auth which is why I followed the guide. I created tests for the method once I finished developing them so it did not follow the TDD method.
 
 
 
