@@ -15,21 +15,29 @@ This is a Java and Spring boot implementation of The Gymgoers backend.
 
 ## About The Project
 
-For my first full-stack project I created an application called [The GymGoers](https://github.com/parsadanesh/TheGymGoers/blob/main/ProjectREADME.md) and I did this using the `MERN` stack (`MongoDB`, `ExpressJS`, `ReactJS`, `NodeJS`).
+In July I created my first full-stack project, I made an application called [The GymGoers](https://github.com/parsadanesh/TheGymGoers/blob/main/ProjectREADME.md) and I did this using the `MERN` stack (`MongoDB`, `ExpressJS`, `ReactJS`, `NodeJS`).
 
-This project is a `Java` and `Spring` implementation of the backend for my app called: `The GymGoers`. I have recently been given the opportunity to create a project in Java and Spring Boot to showcase. 
+Recently, I was given the opportunity to create and showcase a project using Java and Spring. With this project I aim to use `Spring` and `Java` to develop a new backend system for my GymGoers app, my goal is to use the same frontend and database, swapping the old backend created using the MERN stack with a new backend that uses Spring. In the end, since both systems use a REST API and the same routes, the new backend, once developed, should connect seamlessly with the existing frontend and database and the transition should be smooth for those using the app (They should not notice the difference).
 
-As this was my first time using Spring, I wanted to create a project that would really help me solidify my 
-knowledge and skills with Spring and Spring Boot. I thought that performing a migration of the backend from the MERN stack to Spring Boot 
-would provide me with an opportunity to understand the similarities and differences between the technologies, helping me better understand how to use Spring and also get a better understanding of the technologies I have already used like creating REST APIs. I am also using this opportunity as a chance to improve on my previous implementation and reevaluate previous decisions I made due to inexperience.
+This project is a `Java` and `Spring` implementation of the backend for my app, 'The GymGoers`.
+
+As this was my first time using Spring, I wanted to focus on using this project as an opportunity to help solidify my knowledge and skills with Spring and Spring Boot. My thought is that performing a migration of the backend from the MERN stack to Spring and Spring Boot would provide me with the opportunity to understand the similarities and differences between the two technologies. I think this process will help me better understand how, and why I am using Spring, but also I want to use this as a chance to improve on the technologies I have already used like REST APIs. I am also using this opportunity to improve on my previous implementation and reevaluate decisions I made previously due to inexperience.
 
 ## Technologies Used
 
-Built using `Java 23` using `Spring` and `Maven` with `MongoDB` for the data persistence layer.
+Built using `Java 17` using `Spring` and `Maven` with `MongoDB` for the data persistence layer.
 
 Built with the following dependencies: Spring Web, Rest Repositories, Spring Security, JWT, JUnit, Mockito, MongoDB
 
 ## Architecture
+
+### Project Architecture
+
+![Architecture Diagram](https://github.com/parsadanesh/GymGoers-Spring/blob/main/Docs/BackendArchitecureDiagram.JPG)
+
+
+
+### Server Architecture
 
 Draft - React Frontend, Spring Boot backend, MongoDB Database, using rest controllers HTTP request my from the frontend are handled. The controllers are different so depending on the type of request and the payload the request is routed to a specific controller method. That method talks to the service class which communicates with the repository interface which implements the mongoDB repository using spring boot dependence.
 
