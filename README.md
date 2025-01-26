@@ -1,4 +1,4 @@
-# Java Backend Implementation For The GymGoers
+x# Java Backend Implementation For The GymGoers
 This is a Java and Spring boot implementation of The Gymgoers backend.
 
 <details>
@@ -40,6 +40,9 @@ Built with the following dependencies: Spring Web, Rest Repositories, Spring Sec
 Draft - React Frontend, Spring Boot backend, MongoDB Database, using rest controllers HTTP request my from the frontend are handled. The controllers are different so depending on the type of request and the payload the request is routed to a specific controller method. That method talks to the service class which communicates with the repository interface which implements the mongoDB repository using spring boot dependence.
 
 ### Routing 
+
+
+
 One benefit I found of doing a remigration is that I was able to use the routes from my previous backend, I was able to use these previous routes to guide me when developing the system using Spring and helped me when creating my controllers, services and the methods in them. Some changes between the two implementations have been made and these have been due to improving aspects of the previous implementation, such as the way I send the data across with the requests.
 
 ### User Stories
