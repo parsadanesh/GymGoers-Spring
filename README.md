@@ -44,7 +44,9 @@ One benefit I found of doing a remigration is that I was able to use the routes 
 
 ### User Stories
 
-![User Stories](https://github.com/parsadanesh/GymGoers-Spring/blob/main/Docs/UserStories.JPG)
+
+![image](https://github.com/user-attachments/assets/0515554d-a727-48fb-b699-5dd67a203260)
+
 
 ### Testing
 
