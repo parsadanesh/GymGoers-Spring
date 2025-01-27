@@ -39,16 +39,16 @@ Draft - React Frontend, Spring Boot backend, MongoDB Database, using rest contro
 
 ### Routing 
 
-*Auth*
+**Auth**
 - POST ("/api/auth/signup") - Creates a new user
 - POST ("/api/auth/signin") - Attempts to login a user 
 
-*User*
+**User**
 - GET ("/users/{username}/workouts") - Get a users list of workouts
 - POST ("/users/{username}/workouts") - Add a new workout to users list
 - DELETE ("/users/{username}/workouts/{_id}") - Delete a workout from the users list based on the workout ID
 
-*Gymgroups*
+**Gymgroups**
 - POST ("/gymgroups/{username}") - Creates a new GymGroup
 - POST ("/gymgroups/{username}/{groupName}") - Adds a user trying to join the GymGroup
 - GET ("/gymgroups/{username}") - Retrieves all the GymGroups a user in a part of
@@ -56,7 +56,8 @@ Draft - React Frontend, Spring Boot backend, MongoDB Database, using rest contro
 
 One benefit I found of doing a remigration is that I was able to use the routes from my previous backend, I was able to use these previous routes to guide me when developing the system using Spring and helped me when creating my controllers, services and the methods in them. Some changes between the two implementations have been made and these have been due to improving aspects of the previous implementation, such as the way I send the data across with the requests.
 
-// put route diagrams 
+**User Route Diagrams**
+![Add Workout Diagram](https://github.com/parsadanesh/GymGoers-Spring/blob/main/Docs/AddWorkoutRoute.JPG)
 
 ### User Stories
 
@@ -65,8 +66,6 @@ One benefit I found of doing a remigration is that I was able to use the routes 
 
 
 ### Testing
-
-
 
 A massive part of this project has been testing. Since the majority of the workload came from the backend I focused on using test-driven development to develop the user stories and the features of the application. For each user story, I created a set of tests that I could implement, I started with the controllers and used Mockito is mock the responses from the services classes. After that, I worked on testing the services and I used Mockito to mock the interactions with the repositories. 
 
