@@ -1,4 +1,4 @@
-x# Java Backend Implementation For The GymGoers
+# Java Backend Implementation For The GymGoers
 This is a Java and Spring boot implementation of The Gymgoers backend.
 
 <details>
