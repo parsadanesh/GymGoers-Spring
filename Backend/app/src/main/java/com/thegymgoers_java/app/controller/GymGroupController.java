@@ -75,9 +75,7 @@ public class GymGroupController {
 
     @GetMapping("/gymgroups/group/{groupName}")
     public ResponseEntity<?> getWorkouts(@PathVariable String groupName, @RequestParam String username){
-        System.out.println(username);
         try{
-            System.out.println(groupName);
             List<Workout> workoutList = gymGroupService.getUsersWorkouts(username);
             if (!workoutList.isEmpty()) {
                 return new ResponseEntity<>(workoutList, HttpStatus.OK);

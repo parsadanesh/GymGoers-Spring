@@ -91,8 +91,6 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody NewUserRequest newUserRequest) {
 
-//        System.out.println(newUserRequest);
-
         // Checking if email/username is already taken
         if (userRepository.findByUsername(newUserRequest.getUsername()).isPresent()) {
             return ResponseEntity
