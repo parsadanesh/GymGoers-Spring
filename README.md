@@ -15,7 +15,7 @@ This is a Java and Spring boot implementation of The Gymgoers backend.
 
 ## About The Project
 
-In July I created my first full-stack project, I made an application called [The GymGoers](https://github.com/parsadanesh/TheGymGoers/blob/main/ProjectREADME.md) and I did this using the `MERN` stack (`MongoDB`, `ExpressJS`, `ReactJS`, `NodeJS`). This project is a `Java` and `Spring` implementation of the backend for the 'The GymGoers` app.
+In July I created my first full-stack project, I made an application called [The GymGoers](https://github.com/parsadanesh/TheGymGoers/blob/main/ProjectREADME.md) and I did this using the `MERN` stack (`MongoDB`, `ExpressJS`, `ReactJS`, `NodeJS`). This project is a `Java` and `Spring` implementation of the backend for the `The GymGoers` app.
 
 Recently, I was given the opportunity to create and showcase a project using Java and Spring. With this project I aim to use `Spring` and `Java` to develop a new backend system for my GymGoers app, my goal is to use the same frontend and database, swapping the old backend created using the MERN stack with a new backend that uses Spring. In the end, since both systems use a REST API and the same routes, the new backend, once developed, should connect seamlessly with the existing frontend and database and the transition should be smooth for those using the app (They should not notice the difference when using the app).
 
