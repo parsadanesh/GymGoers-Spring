@@ -33,10 +33,6 @@ Built with the following dependencies: Spring Web, Rest Repositories, Spring Sec
 
 ![Architecture Diagram](https://github.com/parsadanesh/GymGoers-Spring/blob/main/Docs/BackendArchitecureDiagram.JPG)
 
-### Server Architecture
-
-Draft - React Frontend, Spring Boot backend, MongoDB Database, using rest controllers HTTP request my from the frontend are handled. The controllers are different so depending on the type of request and the payload the request is routed to a specific controller method. That method talks to the service class which communicates with the repository interface which implements the mongoDB repository using spring boot dependence.
-
 ### Routing 
 
 **Auth**
@@ -77,14 +73,14 @@ One benefit I found of doing a remigration is that I was able to use the routes 
 
 ### Testing
 
-A massive part of this project has been testing. Since the majority of the workload came from the backend I focused on using test-driven development to develop the user stories and the features of the application. For each user story, I created a set of tests that I could implement, I started with the controllers and used Mockito is mock the responses from the services classes. After that, I worked on testing the services and I used Mockito to mock the interactions with the repositories. 
+A massive part of this project has been testing. Since the majority of the workload came from the backend I focused on using test-driven development to develop the user stories and the application's features. For each user story, I created a set of tests that I could implement, I started with the controllers and used Mockito is mock the responses from the services classes. After that, I worked on testing the services and I used Mockito to mock the interactions with the repositories. 
 
 One area I did not use TDD for development was the authentication for the sign-in and sign-up up and it is because I followed a JWT authentication guide recommended by another software engineer, it was my first time implementing JWT auth which is why I followed the guide. I created tests for the method once I finished developing them so it did not follow the TDD method.
 
 
 ## Running The App
 
-You can use my application in a couple of ways.
+**You can use my application in a couple of ways**
 
 ## Using the website
 To begin with, I have deployed my application to the cloud, I used Netlify to deploy the frontend and, I used Docker to containerise my backend to deploy on Render. 
@@ -124,12 +120,12 @@ To run the backend you can either use an IDE and run the main method or use dock
 ### Run the Application
 - `mvn spring-boot:run`
 
-## Project Review and Future Features
+## Project Review and Future 
 
-Going forward with the project, I have deployed the application to the cloud and have sent the link to friends and colleagues who I know will benefit from using the app. I have asked those who are using my app to think about the app while using it to provide me with features they would like to see added, and any improvements they might have noticed could be implemented, but also to get feedback on the parts and features of the app that they liked and thought were nice features of the app. 
+Moving forward with the project, I have deployed the application to the cloud and sent the link to friends and colleagues I know will benefit from using the app. I have asked those who are using my app to think about the app while using it to provide me with features they would like to see added, and any improvements they might have noticed could be implemented, but also to get feedback on the parts and features of the app that they liked and thought were nice features of the app. 
 
 I see real potential with this app and the concept, my goal, through the feedback I get from my friends who use the app, is to make it into something that can be used by all with no issues. I want to make it as easy to navigate and as simple as possible while still providing all existing and any additional features/functionalities. 
 
-In the meantime, there are improvements that I have planned, mostly to the UI, to further improve the experience of using the frontend. For example, since now I am using the cloud, there could be a delay with requests until the backend starts up again. I want to display a loading icon for times when a user is still waiting for their requests to go through and receive a response. 
+In the meantime, there are improvements that I have planned, mostly to the UI, to improve further the experience of using the frontend. For example, since I am now using the cloud, there could be a delay with requests until the backend starts up again. I want to display a loading icon for moments like signing in where a user is still waiting for their requests to go through and receive a response. 
 
 Another small improvement I believe will significantly improve UX is to improve the way the list of exercises is displayed, my idea is to categorise the exercises and display them as so, this will make it much easier to navigate the exercises when logging a workout and will make it easier to store a lot more exercises in the list without making more difficult to navigate.
