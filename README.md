@@ -54,7 +54,7 @@ Draft - React Frontend, Spring Boot backend, MongoDB Database, using rest contro
 - GET ("/gymgroups/{username}") - Retrieves all the GymGroups a user in a part of
 - GET ("/gymgroups/group/{groupName}") - Goes through the GymGroup, find all users and gets their list of workouts in order to calculate their number of consecutive days for the leaderboard
 
-One benefit I found of doing a remigration is that I was able to use the routes from my previous backend, I was able to use these previous routes to guide me when developing the system using Spring and helped me when creating my controllers, services and the methods in them. Some changes between the two implementations have been made and these have been due to improving aspects of the previous implementation, such as the way I send the data across with the requests.
+One benefit I found of doing a remigration is that I was able to use the routes from my previous backend, I was able to use these previous routes to guide me when developing the system using Spring and helped me when creating my controllers, services and the methods in them. Some changes between the two implementations have been made and these have been due to improving aspects of the previous implementation, such as the way I send the data across with the requests through payloads.
 
 **User Route Diagrams**
 ### Add Workout
