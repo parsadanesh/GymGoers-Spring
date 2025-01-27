@@ -57,10 +57,20 @@ Draft - React Frontend, Spring Boot backend, MongoDB Database, using rest contro
 One benefit I found of doing a remigration is that I was able to use the routes from my previous backend, I was able to use these previous routes to guide me when developing the system using Spring and helped me when creating my controllers, services and the methods in them. Some changes between the two implementations have been made and these have been due to improving aspects of the previous implementation, such as the way I send the data across with the requests.
 
 **User Route Diagrams**
+### Add Workout
 ![Add Workout Diagram](https://github.com/parsadanesh/GymGoers-Spring/blob/main/Docs/AddWorkoutRoute.JPG)
+### Get workouts
+![GetWorkoutRoute](https://github.com/parsadanesh/GymGoers-Spring/blob/main/Docs/GetWorkoutsRoute.JPG)
+### Delete Workout
+![DeleteWorkoutRoute](https://github.com/parsadanesh/GymGoers-Spring/blob/main/Docs/DeleteWorkoutRoute.JPG)
+
+**Auth Diagrams**
+### Sign Up New User
+![SignUpUser](https://github.com/parsadanesh/GymGoers-Spring/blob/main/Docs/AddNewUserRoute.JPG)
+### Sign In User
+![SignInUser](https://github.com/parsadanesh/GymGoers-Spring/blob/main/Docs/SignInUserRoute.JPG)
 
 ### User Stories
-
 
 ![image](https://github.com/user-attachments/assets/0515554d-a727-48fb-b699-5dd67a203260)
 
