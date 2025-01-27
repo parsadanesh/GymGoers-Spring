@@ -80,9 +80,11 @@ One area I did not use TDD for development was the authentication for the sign-i
 ### Deployment
 
 **Netlify**
+
 For the frontend I used Netlify, I deployed the web app using the GitHub repository to allow CI/CD which makes it easier to make any updates to the frontend. 
 
 **Render**
+
 To deploy the backend, I wanted to use render because I had previous experience with it. To deploy the Java project using Render, I had to use Docker and I saw it as a good chance to start gaining experience with Docker.
 
 I went through the process of installing Docker, and then creating a Dockerfile in the root of my backend. I used maven build to create a target folder with a Jar file of the project which I then used in the Dockerfile. I still have a lot of things to learn regarding the Dockerfile and Docker in general but I now understand why and how it is used and why it is an important technology.
