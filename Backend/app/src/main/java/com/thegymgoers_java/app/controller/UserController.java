@@ -29,12 +29,17 @@ public class UserController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> getUsersWorkouts(@PathVariable String username) {
 
-        // Attempting to find list of workouts based on a user's username
-        List<Workout> workoutList = userService.getWorkouts(username);
+        try {
+            // Attempting to find list of workouts based on a user's username
+            List<Workout> workoutList = userService.getWorkouts(username);
 
-        // Returns the valid list of workouts
-        if (workoutList != null) {
-            return new ResponseEntity<>(workoutList, HttpStatus.OK);
+            // Returns the valid list of workouts
+            if (workoutList != null) {
+                return new ResponseEntity<>(workoutList, HttpStatus.OK);
+            }
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
         }
 
         return new ResponseEntity<>("Error: Workouts not found", HttpStatus.BAD_REQUEST);

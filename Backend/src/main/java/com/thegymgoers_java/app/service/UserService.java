@@ -6,7 +6,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.thegymgoers_java.app.model.User;
 import com.thegymgoers_java.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -89,7 +88,7 @@ public class UserService {
         ValidationUtil.validateUsername(username);
 
         User user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        workoutToAdd.setDataCreated(LocalDateTime.now().toString());
+        workoutToAdd.setDateCreated(LocalDateTime.now().toString());
         user.addWorkout(workoutToAdd);
         return userRepository.save(user);
     }

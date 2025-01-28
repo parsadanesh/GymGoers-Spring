@@ -27,9 +27,6 @@ public class GymGroup {
     @JsonProperty("members")
     private List<String> members = new ArrayList<>();
 
-    // I have to make a decision on to store the user object with the gym groups, or I can send through the
-    // user's mongo id to store and use that to access the user object.
-
 
     public String get_id() {
         return _id;
@@ -59,17 +56,13 @@ public class GymGroup {
         return members;
     }
 
-    public void addMembers(String membersId) {
+    public void addMember(@NotEmpty String membersId) {
         this.members.add(membersId);
     }
 
     @Override
     public String toString() {
-        return "GymGroup{" +
-                "_id='" + _id + '\'' +
-                ", groupName='" + groupName + '\'' +
-                ", admins=" + admins +
-                ", members=" + members +
-                '}';
+        return String.format("GymGroup{_id='%s', groupName='%s', admins=%s, members=%s}",
+                _id, groupName, admins, members);
     }
 }

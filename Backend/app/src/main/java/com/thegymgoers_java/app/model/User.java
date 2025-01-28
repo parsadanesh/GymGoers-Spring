@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,7 +28,7 @@ public class User {
     private String emailAddress;
 
     @JsonProperty("password")
-//    @NotEmpty(message = "Account needs an password")
+    @NotEmpty(message = "Account needs a password")
     private String password;
 
     @JsonProperty("workoutsList")
@@ -37,8 +36,7 @@ public class User {
 
     private Set<ERole> roles = new HashSet<>();
 
-
-    public User(String username, String emailAddress, String password){
+    public User(String username, String emailAddress, String password) {
         this.username = username;
         this.password = password;
         this.emailAddress = emailAddress;
@@ -46,11 +44,11 @@ public class User {
 
     // Getters and setters
 
-    public String getId() {
+    public String get_id() {
         return _id;
     }
 
-    public void setId(String _id) {
+    public void set_Id(String _id) {
         this._id = _id;
     }
 
@@ -58,23 +56,23 @@ public class User {
         return username;
     }
 
-    public String getEmailAddress(){
+    public String getEmailAddress() {
         return emailAddress;
     }
 
-    public void setPassword(String passwordToSet){
+    public void setPassword(String passwordToSet) {
         this.password = passwordToSet;
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return this.password;
     }
 
-    public List<Workout> getWorkoutsList(){
+    public List<Workout> getWorkoutsList() {
         return this.workoutsList;
     }
 
-    public void setWorkoutsList(List<Workout> workoutsList){
+    public void setWorkoutsList(List<Workout> workoutsList) {
         this.workoutsList = workoutsList;
     }
 
@@ -86,7 +84,7 @@ public class User {
         this.roles = roles;
     }
 
-    public void addWorkout(Workout workoutToAdd){
+    public void addWorkout(Workout workoutToAdd) {
         this.workoutsList.add(workoutToAdd);
     }
 }

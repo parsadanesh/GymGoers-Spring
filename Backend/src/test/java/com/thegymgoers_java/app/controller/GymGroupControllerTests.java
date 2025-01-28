@@ -66,7 +66,7 @@ public class GymGroupControllerTests {
             mockGymGroup.set_id("67855bf37ecbd73ac508de53");
             mockGymGroup.setGroupName("testGroupUpdatedtety");
             mockGymGroup.addAdmins("677fc378a4b1fc5b9fd40411");
-            mockGymGroup.addMembers("677fc378a4b1fc5b9fd40411");
+            mockGymGroup.addMember("677fc378a4b1fc5b9fd40411");
 
             when(gymGroupService.createGymGroup(anyString(), any(NewGymGroupRequest.class))).thenReturn(mockGymGroup);
 

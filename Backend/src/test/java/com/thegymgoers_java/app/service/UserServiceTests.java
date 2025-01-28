@@ -305,7 +305,7 @@ public class UserServiceTests {
             assertNotNull(result);
             assertEquals(1, result.getWorkoutsList().size());
             assertEquals(workout, result.getWorkoutsList().get(0));
-            assertNotNull(workout.getDataCreated());
+            assertNotNull(workout.getDateCreated());
         }
 
         @Test

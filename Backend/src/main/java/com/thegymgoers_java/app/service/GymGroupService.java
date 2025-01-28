@@ -50,7 +50,7 @@ public class GymGroupService {
 
         // Add user as admin and member of the GymGroup
         gymGroup.addAdmins(admin.getUsername());
-        gymGroup.addMembers(admin.getUsername());
+        gymGroup.addMember(admin.getUsername());
 
         // Save and return the new GymGroup
         return gymGroupRepository.save(gymGroup);
@@ -72,7 +72,7 @@ public class GymGroupService {
         if(userRepository.findByUsername(username).isPresent() && gymGroupRepository.findByGroupName(groupName).isPresent()){
             gymGroup = gymGroupRepository.findByGroupName(groupName).get();
             user = userRepository.findByUsername(username).get();
-            gymGroup.addMembers(user.getUsername());
+            gymGroup.addMember(user.getUsername());
             return gymGroupRepository.save(gymGroup);
         } else {
             throw new Exception("User not found || GymGroup not found");

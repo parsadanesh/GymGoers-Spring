@@ -47,7 +47,7 @@ public class GymGroupServiceTests {
         request.setGroupName("Test Group");
 
         User user = new User("testuser", "test@email.com", "testpass");
-        user.setId("1");
+        user.set_Id("1");
 
         when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
         when(gymGroupRepository.findByGroupName(anyString())).thenReturn(Optional.empty());
