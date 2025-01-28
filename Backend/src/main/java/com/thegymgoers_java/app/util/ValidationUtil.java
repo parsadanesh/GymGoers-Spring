@@ -3,9 +3,9 @@ package com.thegymgoers_java.app.util;
 public class ValidationUtil {
 
     // Throws an exception if the username is null or empty
-    public static void validateUsername(String username) {
-        if (username == null || username.trim().isEmpty()) {
-            throw new IllegalArgumentException("User details cannot not be empty or null");
+    public static void validateString(String string) {
+        if (string == null || string.trim().isEmpty()) {
+            throw new IllegalArgumentException("Details cannot not be empty or null");
         }
     }
 
@@ -16,4 +16,6 @@ public class ValidationUtil {
             throw new IllegalArgumentException("User details cannot not be empty or null");
         }
     }
+
+
 }

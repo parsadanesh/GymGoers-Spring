@@ -71,7 +71,7 @@ public class UserService {
      */
     public List<Workout> getWorkouts(String username) {
         // Throws an exception if the username is null or empty
-        ValidationUtil.validateUsername(username);
+        ValidationUtil.validateString(username);
 
         User user = userRepository.findByUsername(username).get();
         return user.getWorkoutsList();
@@ -85,7 +85,7 @@ public class UserService {
      */
     public User addWorkout(String username, Workout workoutToAdd) {
         // Throws an exception if the username is null or empty
-        ValidationUtil.validateUsername(username);
+        ValidationUtil.validateString(username);
 
         User user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("User not found"));
         workoutToAdd.setDateCreated(LocalDateTime.now().toString());
@@ -101,7 +101,7 @@ public class UserService {
      */
     public User deleteWorkout(String username, String _id) {
         // Throws an exception if the username is null or empty
-        ValidationUtil.validateUsername(username);
+        ValidationUtil.validateString(username);
 
         if (userRepository.findByUsername(username).isPresent()) {
             User user = userRepository.findByUsername(username).get();

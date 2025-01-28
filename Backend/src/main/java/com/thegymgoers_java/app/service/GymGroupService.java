@@ -11,20 +11,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GymGroupService {
 
-    @Autowired
-    GymGroupRepository gymGroupRepository;
+    private final GymGroupRepository gymGroupRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    UserRepository userRepository;
-
+    public GymGroupService(GymGroupRepository gymGroupRepository, UserRepository userRepository) {
+        this.gymGroupRepository = gymGroupRepository;
+        this.userRepository = userRepository;
+    }
 
     public GymGroup createGymGroup(String username, NewGymGroupRequest newGymGroupRequest) throws Exception {
         // Validate username
-        ValidationUtil.validateUsername(username);
+        ValidationUtil.validateString(username);
+        ValidationUtil.validateString(newGymGroupRequest.getGroupName());
+
+        var userOptional = userRepository.findByUsername(username);
+
+        if(userOptional.isEmpty()){
+            throw new Exception("User not found");
+        }
+
+        var existingGymGroup = gymGroupRepository.findByGroupName(newGymGroupRequest.getGroupName());
 
         // Validate group name
         if (newGymGroupRequest.getGroupName() == null || newGymGroupRequest.getGroupName().trim().isEmpty()) {
@@ -32,28 +44,24 @@ public class GymGroupService {
         }
 
         // Check if a GymGroup with the same name already exists
-        if(gymGroupRepository.findByGroupName(newGymGroupRequest.getGroupName()).isPresent()){
+        if (existingGymGroup.isPresent()) {
             throw new Exception("GymGroup with that name exists");
         }
 
         // Create new GymGroup
         GymGroup gymGroup = new GymGroup();
         gymGroup.setGroupName(newGymGroupRequest.getGroupName());
-        User admin;
-
-        // Check if the user exists
-        if(userRepository.findByUsername(username).isPresent()){
-            admin = userRepository.findByUsername(username).get();
-        } else {
-            throw new Exception("User not found");
-        }
+        User admin = userOptional.get();
 
         // Add user as admin and member of the GymGroup
         gymGroup.addAdmins(admin.getUsername());
         gymGroup.addMember(admin.getUsername());
 
+
         // Save and return the new GymGroup
-        return gymGroupRepository.save(gymGroup);
+        GymGroup savedGymGroup = gymGroupRepository.save(gymGroup);
+
+        return savedGymGroup;
     }
 
     public GymGroup joinGymGroup(String username, String groupName) throws Exception {
@@ -61,7 +69,16 @@ public class GymGroupService {
         User user;
 
         // Validate username
-        ValidationUtil.validateUsername(username);
+        ValidationUtil.validateString(username);
+
+        var userOptional = userRepository.findByUsername(username);
+        var gymGroupOptional = gymGroupRepository.findByGroupName(groupName);
+
+
+        if(userOptional.isEmpty()){
+            throw new Exception("User not found");
+        }
+
 
         // Validate group name
         if (groupName == null || groupName.trim().isEmpty()) {
@@ -69,23 +86,25 @@ public class GymGroupService {
         }
 
         // Check if both user and GymGroup exist
-        if(userRepository.findByUsername(username).isPresent() && gymGroupRepository.findByGroupName(groupName).isPresent()){
+        if (gymGroupOptional.isPresent()) {
             gymGroup = gymGroupRepository.findByGroupName(groupName).get();
             user = userRepository.findByUsername(username).get();
             gymGroup.addMember(user.getUsername());
             return gymGroupRepository.save(gymGroup);
         } else {
-            throw new Exception("User not found || GymGroup not found");
+            throw new Exception("GymGroup not found");
         }
     }
 
     public List<GymGroup> getGymGroups(String username) throws Exception {
-        ValidationUtil.validateUsername(username);
+        ValidationUtil.validateString(username);
         User user;
 
-        if(userRepository.findByUsername(username).isPresent()){
-            user = userRepository.findByUsername(username).get();
-        }else {
+        var userOptional = userRepository.findByUsername(username);
+
+        if (userOptional.isPresent()) {
+            user = userOptional.get();
+        } else {
             throw new Exception("User not found");
         }
 
@@ -96,19 +115,17 @@ public class GymGroupService {
     }
 
     public List<Workout> getUsersWorkouts(String username) throws Exception {
-        ValidationUtil.validateUsername(username);
-
+        ValidationUtil.validateString(username);
         User user;
+        var userOptional = userRepository.findByUsername(username);
 
-        if(userRepository.findByUsername(username).isPresent()){
-            user = userRepository.findByUsername(username).get();
-        }else {
+        if (userOptional.isPresent()) {
+            user = userOptional.get();
+        } else {
             throw new Exception("User not found");
         }
 
-        List<Workout> workoutList = user.getWorkoutsList();
-
-        return workoutList;
+        return user.getWorkoutsList();
 
     }
 }
