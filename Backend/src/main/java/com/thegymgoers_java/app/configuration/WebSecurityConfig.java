@@ -17,16 +17,16 @@
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.security.web.SecurityFilterChain;
 //import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-//import org.springframework.web.filter.CorsFilter;
 //import org.springframework.web.cors.CorsConfiguration;
 //import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+//import org.springframework.web.filter.CorsFilter;
 //
 //@Configuration
 //@EnableMethodSecurity
 //@EnableWebSecurity
 //public class WebSecurityConfig {
 //    @Autowired
-//    UserDetailsServiceImpl userDetailsService;
+//    private UserDetailsServiceImpl userDetailsService;
 //
 //    @Autowired
 //    private AuthEntryPointJwt unauthorizedHandler;
@@ -89,13 +89,14 @@
 //        CorsConfiguration config = new CorsConfiguration();
 //        config.setAllowCredentials(true);
 //        config.addAllowedOrigin("https://thegymgoerapp.netlify.app");
+//        config.addAllowedOriginPattern("*");
 //        config.addAllowedHeader("*");
 //        config.addAllowedMethod("*");
 //        source.registerCorsConfiguration("/**", config);
 //        return source;
 //    }
 //}
-//
+
 package com.thegymgoers_java.app.configuration;
 
 import com.thegymgoers_java.app.configuration.jwt.AuthEntryPointJwt;
@@ -115,27 +116,49 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
+/**
+ * WebSecurityConfig class configures the security settings for the application.
+ * It sets up authentication, authorization, CORS, and session management.
+ * This class uses JWT for authentication and configures CORS to allow requests from specific origins.
+ */
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
 public class WebSecurityConfig {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
+
+    private final UserDetailsServiceImpl userDetailsService;
+    private final AuthEntryPointJwt unauthorizedHandler;
 
     @Autowired
-    private AuthEntryPointJwt unauthorizedHandler;
+    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, AuthEntryPointJwt unauthorizedHandler) {
+        this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
+    }
 
+    /**
+     * Creates a bean for the AuthTokenFilter which is responsible for filtering
+     * and validating JWT tokens.
+     *
+     * @return an instance of AuthTokenFilter
+     */
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
     }
 
+
+    /**
+     * Creates a bean for the DaoAuthenticationProvider which is responsible for
+     * retrieving user details and encoding passwords.
+     *
+     * @return an instance of DaoAuthenticationProvider
+     */
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(UserDetailsServiceImpl userDetailsService) {
+    public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -147,6 +170,12 @@ public class WebSecurityConfig {
         return authConfig.getAuthenticationManager();
     }
 
+    /**
+     * Creates a bean for the PasswordEncoder which is responsible for encoding
+     * passwords.
+     *
+     * @return an instance of BCryptPasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -162,7 +191,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .authenticationProvider(authenticationProvider(userDetailsService));
+                .authenticationProvider(authenticationProvider());
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -181,13 +210,19 @@ public class WebSecurityConfig {
         return new CorsFilter(source);
     }
 
+    /**
+     * Creates a bean for the UrlBasedCorsConfigurationSource which is
+     * responsible for
+     * configuring CORS settings.
+     *
+     * @return an instance of UrlBasedCorsConfigurationSource
+     */
     @Bean
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.addAllowedOrigin("https://thegymgoerapp.netlify.app");
-        config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         source.registerCorsConfiguration("/**", config);
