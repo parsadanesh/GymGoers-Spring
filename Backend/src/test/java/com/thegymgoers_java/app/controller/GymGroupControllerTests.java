@@ -57,7 +57,7 @@ public class GymGroupControllerTests {
 
         @Test
         @WithMockUser(username = "testname", roles = {"USER"})
-        void shouldReturn200CreatingNewGroup() throws Exception{
+        void shouldReturn201CreatingNewGroup() throws Exception{
             NewGymGroupRequest newGymGroupRequest = new NewGymGroupRequest();
             newGymGroupRequest.setGroupName("testGroupUpdatedtesty");
             newGymGroupRequest.setUsername("testname");
@@ -75,7 +75,7 @@ public class GymGroupControllerTests {
             mockMvc.perform(post("/gymgroups/{username}", user.getUsername())
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(newGymGroupRequest)))
-                    .andExpect(status().isOk())
+                    .andExpect(status().isCreated())
                     .andExpect(content().json(objectMapper.writeValueAsString(mockGymGroup)))
                     .andDo(print());
 
@@ -149,7 +149,7 @@ public class GymGroupControllerTests {
 
         @Test
         @WithMockUser(username = "testname", roles = {"USER"})
-        void shouldReturnNull() throws Exception{
+        void shouldReturnNullMessage() throws Exception{
             // Arrange
             NewGymGroupRequest newGymGroupRequest = new NewGymGroupRequest();
             newGymGroupRequest.setGroupName("validName");
@@ -164,7 +164,7 @@ public class GymGroupControllerTests {
                             .content(objectMapper.writeValueAsString(newGymGroupRequest)))
                     .andExpect(status().isBadRequest())
 //                .andExpect(content().string(org.hamcrest.Matchers.containsString("GymGroup must have a name")))
-                    .andExpect(content().string(""))
+                    .andExpect(content().string("Failed to create GymGroup"))
                     .andDo(print());
 
         }

@@ -18,8 +18,7 @@ import java.util.List;
 @Validated
 public class GymGroupController {
 
-
-    private GymGroupService gymGroupService;
+    private final GymGroupService gymGroupService;
 
     @Autowired
     public GymGroupController(GymGroupService gymGroupService){
@@ -33,18 +32,18 @@ public class GymGroupController {
             GymGroup gymGroup = gymGroupService.createGymGroup(username, newGymGroupRequest);
 
             if (gymGroup != null) {
-                return new ResponseEntity<>(gymGroup, HttpStatus.OK);
+                return new ResponseEntity<>(gymGroup, HttpStatus.CREATED);
             }
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Failed to create GymGroup", HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/gymgroups/{username}/{groupName}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<?> joinGymGroup(@PathVariable String username, @PathVariable String groupName){
+    public ResponseEntity<?> addUserToGymGroup(@PathVariable String username, @PathVariable String groupName){
         try {
             GymGroup gymGroup = gymGroupService.joinGymGroup(username, groupName);
 
@@ -55,7 +54,7 @@ public class GymGroupController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Failed to create GymGroup", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/gymgroups/{username}")
@@ -70,14 +69,13 @@ public class GymGroupController {
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return null;
+        return new ResponseEntity<>("No GymGroups found", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/gymgroups/group/{groupName}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> getWorkouts(@PathVariable String groupName, @RequestParam String username){
-        System.out.println(username);
         try{
-            System.out.println(groupName);
             List<Workout> workoutList = gymGroupService.getUsersWorkouts(username);
             if (!workoutList.isEmpty()) {
                 return new ResponseEntity<>(workoutList, HttpStatus.OK);
@@ -85,8 +83,6 @@ public class GymGroupController {
         }catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return null;
+        return new ResponseEntity<>("No Workouts found", HttpStatus.NOT_FOUND);
     }
-
-
 }
