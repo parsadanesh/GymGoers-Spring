@@ -34,24 +34,32 @@ import java.util.stream.Collectors;
 public class AuthController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    public AuthController(UserService userService){
+    public AuthController(UserService userService,
+                          UserRepository userRepository,
+                          PasswordEncoder encoder,
+                          AuthenticationManager authenticationManager,
+                          JwtUtils jwtUtils) {
         this.userService = userService;
+        this.userRepository = userRepository;
+        this.encoder = encoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
     }
 
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    PasswordEncoder encoder;
-
-    @Autowired
-    JwtUtils jwtUtils;
-
+    /**
+     * Authenticates a user and generates a JWT token.
+     *
+     * @param loginRequest the login request containing the username and
+     * password
+     * @return a ResponseEntity containing the JWT token and user details, or an
+     * error message if authentication fails
+     */
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -88,10 +96,15 @@ public class AuthController {
         }
     }
 
+    /**
+     * Registers a new user in the system.
+     *
+     * @param newUserRequest the request containing the new user's details
+     * @return a ResponseEntity containing a success message or an error message
+     * if registration fails
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody NewUserRequest newUserRequest) {
-
-//        System.out.println(newUserRequest);
 
         // Checking if email/username is already taken
         if (userRepository.findByUsername(newUserRequest.getUsername()).isPresent()) {
@@ -119,17 +132,18 @@ public class AuthController {
             roles.add(ERole.USER);
         } else {
             strRoles.forEach(role -> {
-                if (role.equals("admin")) {
-                    roles.add(ERole.ADMIN);
-                } else {
-                    roles.add(ERole.USER);
+                switch (role) {
+                    case "admin":
+                        roles.add(ERole.ADMIN);
+                        break;
+                    default:
+                        roles.add(ERole.USER);
+                        break;
                 }
             });
         }
-
         user.setRoles(roles);
         userRepository.save(user);
-
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 }
