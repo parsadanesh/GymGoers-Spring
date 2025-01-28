@@ -69,7 +69,7 @@ public class UserControllerTests {
 
         @Test
         @WithMockUser(username = "testname", roles = {"USER"})
-        void shouldReturnNullInvalidUsername() throws Exception {
+        void shouldReturnErrorMessageForInvalidUsername() throws Exception {
             List<Workout> workoutList = new ArrayList<>();
             when(userService.getWorkouts(user.getUsername()))
                     .thenReturn(null);
@@ -77,7 +77,21 @@ public class UserControllerTests {
             mockMvc.perform(get("/users/{username}/workouts", user.getUsername())
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().string(""))
+                    .andExpect(content().string("Error: Workouts not found"))
+                    .andDo(print());
+        }
+
+        @Test
+        @WithMockUser(username = "testname", roles = {"USER"})
+        void shouldReturnThrowExceptionForInvalidUsername() throws Exception {
+            when(userService.getWorkouts(any()))
+                    .thenThrow(new IllegalArgumentException("User details cannot not be empty or null"));
+
+
+            mockMvc.perform(get("/users/{username}/workouts", " ")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().string("User details cannot not be empty or null"))
                     .andDo(print());
         }
 
@@ -85,7 +99,7 @@ public class UserControllerTests {
 //        @WithMockUser(username = "testname", roles = {"USER"})
 //        void shouldReturnUsersWorkoutList() throws Exception {
 //            List<Workout> workoutList = new ArrayList<>();
-//            when(userService.getWorkouts(user.getUsername()))
+//            when(userService.getUsersWorkouts(user.getUsername()))
 //                    .thenReturn(workoutList);
 //
 //            mockMvc.perform(get("/users/{username}/workouts", user.getUsername())
@@ -181,7 +195,7 @@ public class UserControllerTests {
             workout.set_id("1");
             workoutList.add(workout);
 
-            when(userService.getWorkouts(user.getUsername()))
+            when(userService.getUsersWorkouts(user.getUsername()))
                     .thenReturn(workoutList);
 
             mockMvc.perform(delete("/users/{username}/workouts/{workoutID}", user.getUsername(), workoutList.get(0).get_id())

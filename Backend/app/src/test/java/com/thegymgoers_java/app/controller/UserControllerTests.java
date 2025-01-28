@@ -85,7 +85,7 @@ public class UserControllerTests {
 //        @WithMockUser(username = "testname", roles = {"USER"})
 //        void shouldReturnUsersWorkoutList() throws Exception {
 //            List<Workout> workoutList = new ArrayList<>();
-//            when(userService.getWorkouts(user.getUsername()))
+//            when(userService.getUsersWorkouts(user.getUsername()))
 //                    .thenReturn(workoutList);
 //
 //            mockMvc.perform(get("/users/{username}/workouts", user.getUsername())
@@ -181,7 +181,7 @@ public class UserControllerTests {
             workout.set_id("1");
             workoutList.add(workout);
 
-            when(userService.getWorkouts(user.getUsername()))
+            when(userService.getUsersWorkouts(user.getUsername()))
                     .thenReturn(workoutList);
 
             mockMvc.perform(delete("/users/{username}/workouts/{workoutID}", user.getUsername(), workoutList.get(0).get_id())
