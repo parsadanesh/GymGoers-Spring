@@ -1,13 +1,8 @@
 package com.thegymgoers_java.app.controller;
 
+import java.util.Optional;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.thegymgoers_java.app.configuration.jwt.JwtUtils;
-import com.thegymgoers_java.app.configuration.services.UserDetailsImpl;
-import com.thegymgoers_java.app.model.User;
-import com.thegymgoers_java.app.payload.request.LoginRequest;
-import com.thegymgoers_java.app.payload.request.NewUserRequest;
-import com.thegymgoers_java.app.repository.UserRepository;
-import com.thegymgoers_java.app.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,8 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Optional;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -32,6 +25,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.thegymgoers_java.app.configuration.jwt.JwtUtils;
+import com.thegymgoers_java.app.configuration.services.UserDetailsImpl;
+import com.thegymgoers_java.app.model.User;
+import com.thegymgoers_java.app.payload.request.LoginRequest;
+import com.thegymgoers_java.app.payload.request.NewUserRequest;
+import com.thegymgoers_java.app.repository.UserRepository;
+import com.thegymgoers_java.app.service.UserService;
+
+
+/**
+ * This class contains unit tests for the AuthController.
+ * It tests the registration and login functionalities.
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AuthControllerTests {
@@ -40,13 +46,13 @@ public class AuthControllerTests {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @MockBean
-    UserService userService;
+    private UserService userService;
 
     @MockBean
     private JwtUtils jwtUtils;
@@ -57,29 +63,66 @@ public class AuthControllerTests {
     @MockBean
     UserRepository userRepository;
 
-    private Optional<User> mockuser ;
+    private Optional<User> mockUser;
 
     private User user;
-    private User user2;
-    private NewUserRequest newUserRequest = new NewUserRequest();
+    private NewUserRequest newUserRequest;
     private LoginRequest loginRequest;
 
+    /**
+     * Sets up the test environment before each test method.
+     * This method initializes the necessary objects and configurations for
+     * testing.
+     */
     @BeforeEach
     void setUp() {
+        initializeNewUserRequest();
+        initializeLoginRequest();
+        initializeUsers();
+        initializeMockMvc();
+    }
 
-        user = new User("testuser", "pass@email.com", "pass");
-        user2 = new User("testname", "testemail2@dom.com", "fakepass");
+    private void initializeNewUserRequest() {
+        newUserRequest = new NewUserRequest("user");
         newUserRequest.setUsername("testuser");
         newUserRequest.setPassword("pass");
         newUserRequest.setEmailAddress("pass@email.com");
-        mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
-        loginRequest = new LoginRequest();
-        loginRequest.setUsername("pass");
-        loginRequest.setPassword("wrongpass");
     }
 
+    /**
+     * Initializes the login request object with test data.
+     * This method sets up a login request with a username and password.
+     */
+    private void initializeLoginRequest() {
+        loginRequest = new LoginRequest();
+        loginRequest.setUsername("testuser");
+        loginRequest.setPassword("pass");
+    }
+
+    /**
+     * Initializes the user object with test data.
+     * This method sets up a user object with a username, email, and password.
+     */
+    private void initializeUsers() {
+        user = new User("testuser", "pass@email.com", "pass");
+    }
+
+    /**
+     * Initializes the MockMvc object for testing the AuthController.
+     * This method sets up the MockMvc instance with the AuthController.
+     */
+    private void initializeMockMvc() {
+        mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
+    }
+
+    /**
+     * This nested class contains unit tests for the registration functionality
+     * of the AuthController.
+     * It tests various scenarios such as successful registration, registration
+     * with an existing username or email, and invalid registration requests.
+     */
     @Nested
-    class RegisterTests{
+    class RegisterTests {
 
         @Test
         void createUserHttpRequest() throws Exception {
@@ -89,8 +132,8 @@ public class AuthControllerTests {
             // Mocking a call to the api with valid registration details
             // Asserting a successful 200 response
             mockMvc.perform(post("/api/auth/signup")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(user)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(user)))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.message").value("User registered successfully!"))
                     .andDo(print());
@@ -104,8 +147,8 @@ public class AuthControllerTests {
             // Mocking a call to the api with registration with the same username
             // Asserting a unsuccessful 400 response
             mockMvc.perform(post("/api/auth/signup")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(newUserRequest)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(newUserRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Error: Username is already taken!"))
                     .andDo(print());
@@ -119,8 +162,8 @@ public class AuthControllerTests {
             // Mocking a call to the api with registration with the same username
             // Asserting a unsuccessful 400 response
             mockMvc.perform(post("/api/auth/signup")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(newUserRequest)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(newUserRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.message").value("Error: Email is already in use!"))
                     .andDo(print());
@@ -130,43 +173,41 @@ public class AuthControllerTests {
         void createUserWithNullUsername() throws Exception {
             // Mocking a user with the same email/username response
             newUserRequest.setUsername(null);
-//            when(userRepository.findByUsername(newUserRequest.getUsername())).thenReturn(Optional.of(user));
-
-//            when(userRepository.save(user)).thenReturn(user);
+            // when(userRepository.findByUsername(newUserRequest.getUsername())).thenReturn(Optional.of(user));
+            // when(userRepository.save(user)).thenReturn(user);
 
             // Mocking a call to the api with registration with the same username
             // Asserting a unsuccessful 400 response
             mockMvc.perform(post("/api/auth/signup")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(newUserRequest)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(newUserRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(status().reason("Invalid request content."))
-//                    .andExpect(jsonPath("$.message").value("Error: Username is already taken!"))
                     .andDo(print());
         }
 
         @Test
         void creatingNullUser() throws Exception {
-
             User newUser = new User("testuser", null, "fakepass");
-
-            // Mocking the userService response
-//            when(userService.register(newUser))
-//                    .thenThrow(new IllegalArgumentException("User details cannot not be empty or null"));
 
             // Asserting a unsuccessful 400 response
             mockMvc.perform(post("/api/auth/signup")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(newUser)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(newUser)))
                     .andExpect(status().isBadRequest())
                     .andExpect(status().reason("Invalid request content."))
                     .andDo(print());
         }
     }
 
+    /**
+     * This nested class contains unit tests for the login functionality
+     * of the AuthController.
+     * It tests various scenarios such as successful login, login with incorrect
+     * credentials, and invalid login requests.
+     */
     @Nested
     class LoginTests {
-
 
         @Test
         void shouldReturn401IfUsernameDoesNotMatch() throws Exception {
@@ -179,8 +220,8 @@ public class AuthControllerTests {
                     .thenThrow(new RuntimeException("Bad credentials"));
 
             mockMvc.perform(post("/api/auth/signin")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(loginRequest)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(loginRequest)))
                     .andExpect(status().isUnauthorized())
                     .andDo(print());
 
@@ -188,8 +229,6 @@ public class AuthControllerTests {
 
         @Test
         void shouldReturn200IfUsernamePasswordMatch() throws Exception {
-            mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
-
             LoginRequest loginRequest = new LoginRequest();
             loginRequest.setUsername("validusername");
             loginRequest.setPassword("validpassword");
@@ -203,8 +242,8 @@ public class AuthControllerTests {
             when(jwtUtils.generateJwtToken(authentication)).thenReturn("valid-jwt-token");
 
             mockMvc.perform(post("/api/auth/signin")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(loginRequest)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(loginRequest)))
                     .andExpect(status().isOk())
                     .andDo(print());
         }
@@ -217,13 +256,12 @@ public class AuthControllerTests {
 
             // Asserting an unsuccessful 401 response
             mockMvc.perform(post("/api/auth/signin")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(loginRequest)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(loginRequest)))
                     .andExpect(status().isUnauthorized())
                     .andExpect(content().string("Error: Incorrect password"))
                     .andDo(print());
         }
-
 
         @Test
         void shouldReturn400IfUsernameIsEmpty() throws Exception {
@@ -231,14 +269,12 @@ public class AuthControllerTests {
 
             // Asserting a unsuccessful 400 response
             mockMvc.perform(post("/api/auth/signin")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(loginRequest)))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(loginRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(status().reason("Invalid request content."))
                     .andDo(print());
         }
 
     }
-    }
-
-
+}
