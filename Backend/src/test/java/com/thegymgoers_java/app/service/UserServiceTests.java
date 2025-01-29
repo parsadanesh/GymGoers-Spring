@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,11 +33,13 @@ public class UserServiceTests {
     @InjectMocks
     private UserService userService;
 
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        userService = new UserService(passwordEncoder, userRepository);
     }
 
     @Nested
@@ -195,7 +198,7 @@ public class UserServiceTests {
             // Arrange
             User user = new User("testname", "testemail@dom.com", passwordEncoder.encode("fakepass"));
             // Mock repository response
-            when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+            when(userRepository.findByUsername("testname")).thenReturn(Optional.of(user));
             // Act & Assert
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.login(new User("testname", "testemail@dom.com", "wrongpass"));

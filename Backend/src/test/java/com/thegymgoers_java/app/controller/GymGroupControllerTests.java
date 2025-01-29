@@ -5,9 +5,12 @@ import com.thegymgoers_java.app.model.GymGroup;
 import com.thegymgoers_java.app.model.User;
 import com.thegymgoers_java.app.payload.request.NewGymGroupRequest;
 import com.thegymgoers_java.app.service.GymGroupService;
+import com.thegymgoers_java.app.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -29,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ExtendWith(SpringExtension.class)
 public class GymGroupControllerTests {
 
     private static final Logger logger = LoggerFactory.getLogger(GymGroupControllerTests.class);
@@ -42,6 +47,7 @@ public class GymGroupControllerTests {
 
     @MockBean
     GymGroupService gymGroupService;
+
 
     private User user;
     private User user2;
