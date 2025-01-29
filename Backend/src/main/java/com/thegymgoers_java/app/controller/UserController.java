@@ -73,7 +73,18 @@ public class UserController {
         }
 
         return new ResponseEntity<>("Error: Workout not deleted", HttpStatus.BAD_REQUEST);
+    }
 
+    @GetMapping("/users/{username}/weeklytotal")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<?> getWorkoutsFromLast7Days(@PathVariable String username) {
+        int last7Days;
+        try {
+            last7Days = userService.getWorkoutsFromLast7Days(username);
+            return new ResponseEntity<>(last7Days, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
 
     }
 

@@ -1,5 +1,6 @@
 package com.thegymgoers_java.app.service;
 
+import com.thegymgoers_java.app.model.Exercise;
 import com.thegymgoers_java.app.model.Workout;
 import com.thegymgoers_java.app.util.ValidationUtil;
 import org.springframework.context.annotation.Bean;
@@ -11,11 +12,41 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
+
+    public int getWorkoutsFromLast7Days(String username){
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        List<Workout> workoutWeek = user.getWorkoutsList().stream()
+                .filter(workout -> LocalDateTime.parse(workout.getDateCreated(), formatter).isAfter(sevenDaysAgo))
+                .collect(Collectors.toList());
+
+        return calculateTotalWeight(workoutWeek);
+    }
+
+    public int calculateTotalWeight(List<Workout> workoutList){
+        int result = 0;
+        for(Workout workout: workoutList){
+            for(Exercise exercise: workout.getExercises()){
+                if(!(exercise.getTime()>0)){
+                    int total = (exercise.getSets() * exercise.getReps() * exercise.getWeight());
+                    result = result + total;
+                }
+            }
+        }
+
+        return result;
+    }
+
 //    // Password encoder for hashing passwords
 //    private BCryptPasswordEncoder passwordEncoder;
 //

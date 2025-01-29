@@ -24,4 +24,20 @@ public class Exercise {
 
     @JsonProperty("time")
     private int time;
+
+    public int getSets() {
+        return sets;
+    }
+
+    public int getReps() {
+        return reps;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public int getTime() {
+        return time;
+    }
 }
