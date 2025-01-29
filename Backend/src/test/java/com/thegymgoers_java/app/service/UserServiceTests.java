@@ -70,7 +70,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.register(user);
             });
-            assertEquals("User details cannot not be empty or null", exception.getMessage());
+            assertEquals("User details cannot be empty or null", exception.getMessage());
         }
 
         @Test
@@ -81,7 +81,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.register(user);
             });
-            assertEquals("User details cannot not be empty or null", exception.getMessage());
+            assertEquals("User details cannot be empty or null", exception.getMessage());
         }
 
         @Test
@@ -92,7 +92,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.register(user);
             });
-            assertEquals("User details cannot not be empty or null", exception.getMessage());
+            assertEquals("User details cannot be empty or null", exception.getMessage());
         }
 
         @Test
@@ -103,7 +103,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.register(user);
             });
-            assertEquals("User details cannot not be empty or null", exception.getMessage());
+            assertEquals("User details cannot be empty or null", exception.getMessage());
         }
 
         @Test
@@ -157,7 +157,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.login(user);
             });
-            assertEquals("User details cannot not be empty or null", exception.getMessage());
+            assertEquals("User details cannot be empty or null", exception.getMessage());
         }
 
         @Test
@@ -168,7 +168,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.login(user);
             });
-            assertEquals("User details cannot not be empty or null", exception.getMessage());
+            assertEquals("User details cannot be empty or null", exception.getMessage());
         }
 
         @Test
@@ -179,7 +179,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.login(user);
             });
-            assertEquals("User details cannot not be empty or null", exception.getMessage());
+            assertEquals("User details cannot be empty or null", exception.getMessage());
         }
 
         @Test
@@ -190,7 +190,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.login(user);
             });
-            assertEquals("User details cannot not be empty or null", exception.getMessage());
+            assertEquals("User details cannot be empty or null", exception.getMessage());
         }
 
         @Test
@@ -277,7 +277,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.getWorkouts(null);
             });
-            assertEquals("Details cannot not be empty or null", exception.getMessage());
+            assertEquals("Details cannot be empty or null", exception.getMessage());
         }
 
         @Test
@@ -286,7 +286,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.getWorkouts("");
             });
-            assertEquals("Details cannot not be empty or null", exception.getMessage());
+            assertEquals("Details cannot be empty or null", exception.getMessage());
         }
     }
 
@@ -320,7 +320,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.addWorkout(null, workout);
             });
-            assertEquals("Details cannot not be empty or null", exception.getMessage());
+            assertEquals("Details cannot be empty or null", exception.getMessage());
         }
 
         @Test
@@ -332,7 +332,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.addWorkout("", workout);
             });
-            assertEquals("Details cannot not be empty or null", exception.getMessage());
+            assertEquals("Details cannot be empty or null", exception.getMessage());
         }
 
         @Test
@@ -416,7 +416,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.deleteWorkout(null, workoutId);
             });
-            assertEquals("Details cannot not be empty or null", exception.getMessage());
+            assertEquals("Details cannot be empty or null", exception.getMessage());
         }
 
         @Test
@@ -428,7 +428,7 @@ public class UserServiceTests {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
                 userService.deleteWorkout("", workoutId);
             });
-            assertEquals("Details cannot not be empty or null", exception.getMessage());
+            assertEquals("Details cannot be empty or null", exception.getMessage());
         }
     }
 }

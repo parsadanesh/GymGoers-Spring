@@ -77,7 +77,7 @@ public class GymGroupServiceTests {
             gymGroupService.createGymGroup(null, request);
         });
 
-        assertEquals("Details cannot not be empty or null", exception.getMessage());
+        assertEquals("Details cannot be empty or null", exception.getMessage());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class GymGroupServiceTests {
             gymGroupService.createGymGroup("testuser", request);
         });
 
-        assertEquals("Details cannot not be empty or null", exception.getMessage());
+        assertEquals("Details cannot be empty or null", exception.getMessage());
     }
 
     @Test
