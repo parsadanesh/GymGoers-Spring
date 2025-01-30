@@ -71,6 +71,7 @@ public class GymGroupService {
 
         // Validate username
         ValidationUtil.validateString(username);
+        ValidationUtil.validateString(groupName);
 
         var userOptional = userRepository.findByUsername(username);
         var gymGroupOptional = gymGroupRepository.findByGroupName(groupName);
@@ -80,11 +81,6 @@ public class GymGroupService {
             throw new Exception("User not found");
         }
 
-
-        // Validate group name
-        if (groupName == null || groupName.trim().isEmpty()) {
-            throw new IllegalArgumentException("GymGroup must have a name");
-        }
 
         // Check if both user and GymGroup exist
         if (gymGroupOptional.isPresent()) {

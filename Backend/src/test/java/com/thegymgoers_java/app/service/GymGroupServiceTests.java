@@ -16,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -127,8 +129,119 @@ public class GymGroupServiceTests {
         }
     }
 
+    @Nested
     class AddUserToGymGroup {
 
+        @Test
+        void testJoinGymGroup_Success() throws Exception {
+            String username = "testuser";
+            String groupName = "Test Group";
+
+            User user = new User(username, "test@email.com", "testpass");
+            GymGroup gymGroup = new GymGroup();
+            gymGroup.setGroupName(groupName);
+
+            when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+            when(gymGroupRepository.findByGroupName(anyString())).thenReturn(Optional.of(gymGroup));
+            when(gymGroupRepository.save(any(GymGroup.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+            GymGroup result = gymGroupService.joinGymGroup(username, groupName);
+
+            assertNotNull(result);
+            assertEquals(groupName, result.getGroupName());
+            assertTrue(result.getMembers().contains(username));
+            verify(gymGroupRepository, times(1)).save(any(GymGroup.class));
+        }
+
+        @Test
+        void testJoinGymGroup_UserNotFound() {
+            String username = "testuser";
+            String groupName = "Test Group";
+
+            when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+
+            Exception exception = assertThrows(Exception.class, () -> {
+                gymGroupService.joinGymGroup(username, groupName);
+            });
+
+            assertEquals("User not found", exception.getMessage());
+        }
+
+        @Test
+        void testJoinGymGroup_GroupNameNullOrEmpty() {
+            String username = "testuser";
+            String groupName = " ";
+
+            Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+                gymGroupService.joinGymGroup(username, groupName);
+            });
+
+            assertEquals("Details cannot be empty or null", exception.getMessage());
+        }
+
+        @Test
+        void testJoinGymGroup_GymGroupNotFound() {
+            String username = "testuser";
+            String groupName = "Test Group";
+
+            User user = new User(username, "test@email.com", "testpass");
+
+            when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+            when(gymGroupRepository.findByGroupName(anyString())).thenReturn(Optional.empty());
+
+            Exception exception = assertThrows(Exception.class, () -> {
+                gymGroupService.joinGymGroup(username, groupName);
+            });
+
+            assertEquals("GymGroup not found", exception.getMessage());
+        }
     }
 
+    @Nested
+    class GetGymGroups {
+
+        @Test
+        void testGetGymGroups_Success() throws Exception {
+            String username = "testuser";
+            User user = new User(username, "test@email.com", "testpass");
+            GymGroup gymGroup = new GymGroup();
+            gymGroup.setGroupName("Test Group");
+
+            when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+            when(gymGroupRepository.findAllByMembersContains(anyString())).thenReturn(List.of(gymGroup));
+
+            List<GymGroup> result = gymGroupService.getGymGroups(username);
+
+            assertNotNull(result);
+            assertEquals(1, result.size());
+            assertEquals("Test Group", result.get(0).getGroupName());
+        }
+
+        @Test
+        void testGetGymGroups_UserNotFound() {
+            String username = "testuser";
+
+            when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+
+            Exception exception = assertThrows(Exception.class, () -> {
+                gymGroupService.getGymGroups(username);
+            });
+
+            assertEquals("User not found", exception.getMessage());
+        }
+
+        @Test
+        void testGetGymGroups_NoGymGroups() throws Exception {
+            String username = "testuser";
+            User user = new User(username, "test@email.com", "testpass");
+
+            when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+            when(gymGroupRepository.findAllByMembersContains(anyString())).thenReturn(Collections.emptyList());
+
+            List<GymGroup> result = gymGroupService.getGymGroups(username);
+
+            assertNotNull(result);
+            assertTrue(result.isEmpty());
+        }
+    }
 }
