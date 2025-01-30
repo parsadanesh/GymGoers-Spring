@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Set;
 
 import static com.thegymgoers_java.app.model.ERole.USER;
@@ -55,8 +57,12 @@ public class GymGroupIntegrationTests {
 
     private String token;
 
+    @Autowired
+    private Environment environment;
+
     @BeforeEach
     void setUp() throws Exception {
+        System.out.println("active: " + Arrays.toString(environment.getActiveProfiles()));
 
         gymGroupRepository.deleteAll();
         userRepository.deleteAll();
@@ -88,8 +94,6 @@ public class GymGroupIntegrationTests {
         @Test
         void shouldReturn201WhenCreatingGymGroup() throws Exception {
 
-
-            System.out.println("token" + token);
             String username = "testuser";
             NewGymGroupRequest request = new NewGymGroupRequest();
             request.setGroupName("Test Group");
