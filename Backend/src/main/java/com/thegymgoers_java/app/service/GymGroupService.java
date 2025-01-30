@@ -29,7 +29,7 @@ public class GymGroupService {
     public GymGroup createGymGroup(String username, NewGymGroupRequest newGymGroupRequest) throws Exception {
         // Validate username
         ValidationUtil.validateString(username);
-        ValidationUtil.validateString(newGymGroupRequest.getGroupName());
+        ValidationUtil.validateString(NewGymGroupRequest.class, newGymGroupRequest.getGroupName());
 
         var userOptional = userRepository.findByUsername(username);
 
@@ -38,11 +38,6 @@ public class GymGroupService {
         }
 
         var existingGymGroup = gymGroupRepository.findByGroupName(newGymGroupRequest.getGroupName());
-
-        // Validate group name
-        if (newGymGroupRequest.getGroupName() == null || newGymGroupRequest.getGroupName().trim().isEmpty()) {
-            throw new IllegalArgumentException("GymGroup must have a name");
-        }
 
         // Check if a GymGroup with the same name already exists
         if (existingGymGroup.isPresent()) {

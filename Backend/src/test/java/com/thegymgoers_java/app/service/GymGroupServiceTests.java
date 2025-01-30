@@ -95,7 +95,7 @@ public class GymGroupServiceTests {
                 gymGroupService.createGymGroup("testuser", request);
             });
 
-            assertEquals("Details cannot be empty or null", exception.getMessage());
+            assertEquals("GymGroup must have a name", exception.getMessage());
         }
 
         @Test

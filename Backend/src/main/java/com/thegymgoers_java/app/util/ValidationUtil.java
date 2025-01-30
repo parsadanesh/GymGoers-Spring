@@ -9,6 +9,18 @@ public class ValidationUtil {
         }
     }
 
+    // Throws an exception if the String is null or empty
+    public static void validateString(Class<?> requestType, String string) {
+        if (isNullOrEmpty(string)) {
+            switch (requestType.getSimpleName()){
+                case "NewGymGroupRequest":
+                    throw new IllegalArgumentException("GymGroup must have a name");
+//                default:
+//                    throw new IllegalArgumentException("Details cannot be empty or null");
+            }
+        }
+    }
+
     // Throws an exception if the user's email/username used to register is null or
     // empty
     public static void validateUserDetails(String username, String emailAddress) {
