@@ -40,4 +40,24 @@ public class Exercise {
     public int getTime() {
         return time;
     }
+
+    public void setExerciseName(@NotEmpty(message = "Exercise needs a name") String exerciseName) {
+        this.exerciseName = exerciseName;
+    }
+
+    public void setSets(int sets) {
+        this.sets = sets;
+    }
+
+    public void setReps(int reps) {
+        this.reps = reps;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
 }

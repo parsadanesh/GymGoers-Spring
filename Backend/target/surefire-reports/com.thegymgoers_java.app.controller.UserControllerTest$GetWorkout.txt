@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.thegymgoers_java.app.controller.UserControllerTest$GetWorkout
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.057 s -- in com.thegymgoers_java.app.controller.UserControllerTest$GetWorkout

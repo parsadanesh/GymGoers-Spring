@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Workout {
@@ -18,7 +19,7 @@ public class Workout {
 
     @Field("exercises")
     @NotEmpty(message = "Workout needs valid exercises")
-    private List<Exercise> exercises;
+    private List<Exercise> exercises = new ArrayList<>();
 
     @Field("date_created")
     private String dateCreated;

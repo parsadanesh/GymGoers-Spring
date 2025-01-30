@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -124,11 +125,17 @@ public class UserService {
      * @param username The username of the user.
      * @return The list of workouts.
      */
-    public List<Workout> getWorkouts(String username) {
-        // Throws an exception if the username is null or empty
+    public List<Workout> getWorkouts(String username) throws Exception {
         ValidationUtil.validateString(username);
+        User user;
+        var userOptional = userRepository.findByUsername(username);
 
-        User user = userRepository.findByUsername(username).get();
+        if (userOptional.isPresent()) {
+            user = userOptional.get();
+        } else {
+            throw new NoSuchElementException("User not found");
+        }
+
         return user.getWorkoutsList();
     }
 

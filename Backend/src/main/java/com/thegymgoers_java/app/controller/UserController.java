@@ -37,7 +37,7 @@ public class UserController {
             if(workoutList != null){
                 return new ResponseEntity<>(workoutList, HttpStatus.OK);
             }
-        }catch (IllegalArgumentException e){
+        }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
         }

@@ -72,17 +72,4 @@ public class GymGroupController {
         return new ResponseEntity<>("No GymGroups found", HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/gymgroups/group/{groupName}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<?> getWorkouts(@PathVariable String groupName, @RequestParam String username){
-        try{
-            List<Workout> workoutList = gymGroupService.getUsersWorkouts(username);
-            if (!workoutList.isEmpty()) {
-                return new ResponseEntity<>(workoutList, HttpStatus.OK);
-            }
-        }catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>("No Workouts found", HttpStatus.NOT_FOUND);
-    }
 }

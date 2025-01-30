@@ -7,7 +7,7 @@ C:\Users\44747\SE_Training\GymGoers-Spring\Backend\src\main\java\com\thegymgoers
 C:\Users\44747\SE_Training\GymGoers-Spring\Backend\src\main\java\com\thegymgoers_java\app\configuration\WebSecurityConfig.java
 C:\Users\44747\SE_Training\GymGoers-Spring\Backend\src\main\java\com\thegymgoers_java\app\controller\AuthController.java
 C:\Users\44747\SE_Training\GymGoers-Spring\Backend\src\main\java\com\thegymgoers_java\app\controller\GymGroupController.java
-C:\Users\44747\SE_Training\GymGoers-Spring\Backend\src\main\java\com\thegymgoers_java\app\controller\UserContoller.java
+C:\Users\44747\SE_Training\GymGoers-Spring\Backend\src\main\java\com\thegymgoers_java\app\controller\UserController.java
 C:\Users\44747\SE_Training\GymGoers-Spring\Backend\src\main\java\com\thegymgoers_java\app\exception\GlobalExceptionHandler.java
 C:\Users\44747\SE_Training\GymGoers-Spring\Backend\src\main\java\com\thegymgoers_java\app\model\ERole.java
 C:\Users\44747\SE_Training\GymGoers-Spring\Backend\src\main\java\com\thegymgoers_java\app\model\Exercise.java

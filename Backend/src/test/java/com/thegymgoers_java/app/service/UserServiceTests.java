@@ -1,5 +1,6 @@
 package com.thegymgoers_java.app.service;
 
+import com.thegymgoers_java.app.model.Exercise;
 import com.thegymgoers_java.app.model.User;
 import com.thegymgoers_java.app.model.Workout;
 import com.thegymgoers_java.app.repository.UserRepository;
@@ -14,10 +15,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -223,7 +223,7 @@ public class UserServiceTests {
     @Nested
     class getWorkout {
         @Test
-        void testGetWorkouts_Success() {
+        void testGetWorkouts_Success() throws Exception {
             // Arrange
             String username = "testuser";
             User user = new User(username, "testemail@dom.com", "fakepass");
@@ -249,13 +249,14 @@ public class UserServiceTests {
             when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
 
             // Act & Assert
-            assertThrows(NoSuchElementException.class, () -> {
+            NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
                 userService.getWorkouts(username);
             });
+            assertEquals("User not found", exception.getMessage());
         }
 
         @Test
-        void testGetWorkouts_EmptyWorkoutList() {
+        void testGetWorkouts_EmptyWorkoutList() throws Exception {
             // Arrange
             String username = "testuser";
             User user = new User(username, "testemail@dom.com", "fakepass");
@@ -431,4 +432,134 @@ public class UserServiceTests {
             assertEquals("Details cannot be empty or null", exception.getMessage());
         }
     }
+
+    @Nested
+    class GetWorkoutsFromLast7Days {
+
+        @Test
+        void testGetWorkoutsFromLast7Days_Success() {
+            // Arrange
+            String username = "testuser";
+            User user = new User(username, "testemail@dom.com", "fakepass");
+            Workout workout1 = new Workout();
+            workout1.setDateCreated(LocalDateTime.now().minusDays(3).toString());
+            Workout workout2 = new Workout();
+            workout2.setDateCreated(LocalDateTime.now().minusDays(5).toString());
+
+
+            Exercise exercise = new Exercise();
+            exercise.setExerciseName("exericse");
+            exercise.setReps(2);
+            exercise.setSets(2);
+            exercise.setWeight(20);
+            exercise.setTime(0);
+            workout2.setExercises(List.of(exercise));
+            user.setWorkoutsList(List.of(workout1, workout2));
+
+
+            when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+
+            System.out.println(user.getWorkoutsList().get(1));
+
+            // Act
+            int result = userService.getWorkoutsFromLast7Days(username);
+
+            // Assert
+            assertEquals(80, result); // Result from the 2 * 2 * 20 from the exercise
+        }
+
+        @Test
+        void testGetWorkoutsFromLast7Days_UserNotFound() {
+            // Arrange
+            String username = "nonexistentuser";
+
+            when(userRepository.findByUsername(username)).thenReturn(Optional.empty());
+
+            // Act & Assert
+            RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+                userService.getWorkoutsFromLast7Days(username);
+            });
+            assertEquals("User not found", exception.getMessage());
+        }
+
+        @Test
+        void testGetWorkoutsFromLast7Days_EmptyWorkoutList() {
+            // Arrange
+            String username = "testuser";
+            User user = new User(username, "testemail@dom.com", "fakepass");
+            user.setWorkoutsList(new ArrayList<>());
+
+            when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
+
+            // Act
+            int result = userService.getWorkoutsFromLast7Days(username);
+
+            // Assert
+            assertEquals(0, result);
+        }
+    }
+
+    @Nested
+    class CalculateTotalWeight {
+
+        @Test
+        void testCalculateTotalWeight_Success() {
+            // Arrange
+            Exercise exercise1 = new Exercise();
+            exercise1.setExerciseName("exercise1");
+            exercise1.setSets(3);
+            exercise1.setReps(10);
+            exercise1.setWeight(50);
+            exercise1.setTime(0);
+
+            Exercise exercise2 = new Exercise();
+            exercise2.setExerciseName("exercise2");
+            exercise2.setSets(2);
+            exercise2.setReps(15);
+            exercise2.setWeight(30);
+            exercise2.setTime(0);
+
+            int expected = (3*10*50) + (2*15*30);
+
+            Workout workout = new Workout();
+            workout.setExercises(List.of(exercise1, exercise2));
+
+            List<Workout> workoutList = List.of(workout);
+
+            // Act
+            int result = userService.calculateTotalWeight(workoutList);
+
+
+            // Assert
+            assertEquals(expected, result);
+        }
+
+        @Test
+        void testCalculateTotalWeight_EmptyWorkoutList() {
+            // Arrange
+            List<Workout> workoutList = new ArrayList<>();
+
+            // Act
+            int result = userService.calculateTotalWeight(workoutList);
+
+            // Assert
+            assertEquals(0, result);
+        }
+
+        @Test
+        void testCalculateTotalWeight_EmptyExercises() {
+            // Arrange
+            Workout workout = new Workout();
+            workout.setExercises(new ArrayList<>());
+
+            List<Workout> workoutList = List.of(workout);
+
+            // Act
+            int result = userService.calculateTotalWeight(workoutList);
+
+            // Assert
+            assertEquals(0, result);
+        }
+    }
+
 }

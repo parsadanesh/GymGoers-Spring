@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -114,18 +115,4 @@ public class GymGroupService {
 
     }
 
-    public List<Workout> getUsersWorkouts(String username) throws Exception {
-        ValidationUtil.validateString(username);
-        User user;
-        var userOptional = userRepository.findByUsername(username);
-
-        if (userOptional.isPresent()) {
-            user = userOptional.get();
-        } else {
-            throw new Exception("User not found");
-        }
-
-        return user.getWorkoutsList();
-
-    }
 }
