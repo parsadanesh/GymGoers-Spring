@@ -17,6 +17,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Collections;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
@@ -182,6 +186,123 @@ public class GymGroupControllerTest {
                             .content(objectMapper.writeValueAsString(newGymGroupRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(content().string("User not found"))
+                    .andDo(print());
+        }
+    }
+
+    @Nested
+    class AddUserToGymGroup {
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturn200WhenAddingUserToGymGroup() throws Exception {
+            String username = "testname";
+            String groupName = "testGroup";
+
+            GymGroup mockGymGroup = new GymGroup();
+            mockGymGroup.setGroupName(groupName);
+            mockGymGroup.addMember(username);
+
+            when(gymGroupService.joinGymGroup(anyString(), anyString())).thenReturn(mockGymGroup);
+
+            mockMvc.perform(post("/gymgroups/{username}/{groupName}", username, groupName)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(objectMapper.writeValueAsString(mockGymGroup)))
+                    .andDo(print());
+        }
+
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturn400WhenUserNotFound() throws Exception {
+            String username = "testname";
+            String groupName = "testGroup";
+
+            when(gymGroupService.joinGymGroup(anyString(), anyString())).thenThrow(new Exception("User not found"));
+
+            mockMvc.perform(post("/gymgroups/{username}/{groupName}", username, groupName)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().string("User not found"))
+                    .andDo(print());
+        }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturn400WhenGymGroupNotFound() throws Exception {
+            String username = "testname";
+            String groupName = "testGroup";
+
+            when(gymGroupService.joinGymGroup(anyString(), anyString())).thenThrow(new Exception("GymGroup not found"));
+
+            mockMvc.perform(post("/gymgroups/{username}/{groupName}", username, groupName)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().string("GymGroup not found"))
+                    .andDo(print());
+        }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturn400WhenServiceReturnsNull() throws Exception {
+            String username = "testname";
+            String groupName = "testGroup";
+
+            when(gymGroupService.joinGymGroup(anyString(), anyString())).thenReturn(null);
+
+            mockMvc.perform(post("/gymgroups/{username}/{groupName}", username, groupName)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().string("Failed to create GymGroup"))
+                    .andDo(print());
+        }
+    }
+
+    @Nested
+    class GetGymGroups {
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturn200WhenGymGroupsFound() throws Exception {
+            String username = "testname";
+            GymGroup gymGroup = new GymGroup();
+            gymGroup.setGroupName("Test Group");
+
+            when(gymGroupService.getGymGroups(anyString())).thenReturn(List.of(gymGroup));
+
+            mockMvc.perform(get("/gymgroups/{username}", username)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(objectMapper.writeValueAsString(List.of(gymGroup))))
+                    .andDo(print());
+        }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturn400WhenExceptionThrown() throws Exception {
+            String username = "testname";
+
+            when(gymGroupService.getGymGroups(anyString())).thenThrow(new Exception("User not found"));
+
+            mockMvc.perform(get("/gymgroups/{username}", username)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().string("User not found"))
+                    .andDo(print());
+        }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturn404WhenNoGymGroupsFound() throws Exception {
+            String username = "testname";
+
+            when(gymGroupService.getGymGroups(anyString())).thenReturn(Collections.emptyList());
+
+            mockMvc.perform(get("/gymgroups/{username}", username)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().string("No GymGroups found"))
                     .andDo(print());
         }
     }
