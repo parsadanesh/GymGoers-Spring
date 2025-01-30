@@ -65,14 +65,21 @@ public class UserController {
     @DeleteMapping("/users/{username}/workouts/{_id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> deleteWorkoutFromUser(@PathVariable String username, @PathVariable String _id){
-        User updatedUser = userService.deleteWorkout(username, _id);
 
-        // Returns the valid list of workouts
-        if(updatedUser != null){
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        try {
+            User updatedUser = userService.deleteWorkout(username, _id);
+
+            // Returns the valid list of workouts
+            if(updatedUser != null){
+                return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>("Error: Workout not deleted", HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
+
     }
 
     @GetMapping("/users/{username}/weeklytotal")

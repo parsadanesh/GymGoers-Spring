@@ -169,6 +169,57 @@ public class UserControllerTest {
     @Nested
     class DeleteWorkout {
 
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldDeleteWorkoutSuccessfully() throws Exception {
+            // Arrange
+            String workoutId = "workout1";
+            Workout workout = new Workout();
+            workout.set_id(workoutId);
+            user.addWorkout(workout);
+
+            when(userService.deleteWorkout(user.getUsername(), workoutId)).thenReturn(user);
+
+            // Act & Assert
+            mockMvc.perform(delete("/users/{username}/workouts/{_id}", user.getUsername(), workoutId)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(content().json(objectMapper.writeValueAsString(user)))
+                    .andDo(print());
+        }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturnErrorWhenUserNotFound() throws Exception {
+            // Arrange
+            String workoutId = "workout1";
+
+            when(userService.deleteWorkout(user.getUsername(), workoutId)).thenReturn(null);
+
+            // Act & Assert
+            mockMvc.perform(delete("/users/{username}/workouts/{_id}", user.getUsername(), workoutId)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().string("User not found"))
+                    .andDo(print());
+        }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturnErrorWhenWorkoutNotFound() throws Exception {
+            // Arrange
+            String workoutId = "nonexistentworkout";
+
+            when(userService.deleteWorkout(user.getUsername(), workoutId)).thenThrow(new IllegalArgumentException("Workout not found"));
+
+            // Act & Assert
+            mockMvc.perform(delete("/users/{username}/workouts/{_id}", user.getUsername(), workoutId)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().string("Workout not found"))
+                    .andDo(print());
+        }
+
         /*
          * @Test
          *
@@ -191,5 +242,58 @@ public class UserControllerTest {
          * .andDo(print());
          * }
          */
+    }
+
+    @Nested
+    class GetWorkoutsFromLast7Days {
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturnWeeklyTotalSuccessfully() throws Exception {
+            // Arrange
+            String username = "testname";
+            int weeklyTotal = 100;
+
+            when(userService.getWorkoutsFromLast7Days(username)).thenReturn(weeklyTotal);
+
+            // Act & Assert
+            mockMvc.perform(get("/users/{username}/weeklytotal", username)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(String.valueOf(weeklyTotal)))
+                    .andDo(print());
+        }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturnErrorWhenUserNotFound() throws Exception {
+            // Arrange
+            String username = "nonexistentuser";
+
+            when(userService.getWorkoutsFromLast7Days(username)).thenThrow(new RuntimeException("User not found"));
+
+            // Act & Assert
+            mockMvc.perform(get("/users/{username}/weeklytotal", username)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().string("User not found"))
+                    .andDo(print());
+        }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturnErrorWhenExceptionThrown() throws Exception {
+            // Arrange
+            String username = "testname";
+
+            when(userService.getWorkoutsFromLast7Days(username)).thenThrow(new RuntimeException("Unexpected error"));
+
+            // Act & Assert
+            mockMvc.perform(get("/users/{username}/weeklytotal", username)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().string("Unexpected error"))
+                    .andDo(print());
+        }
     }
 }
