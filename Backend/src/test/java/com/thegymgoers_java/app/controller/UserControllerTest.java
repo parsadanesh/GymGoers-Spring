@@ -73,7 +73,7 @@ public class UserControllerTest {
 
             mockMvc.perform(get("/users/{username}/workouts", user.getUsername())
                             .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
+                    .andExpect(status().isNotFound())
                     .andExpect(content().string("Error: Workouts not found"))
                     .andDo(print());
         }
@@ -200,7 +200,7 @@ public class UserControllerTest {
             mockMvc.perform(delete("/users/{username}/workouts/{_id}", user.getUsername(), workoutId)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().string("User not found"))
+                    .andExpect(content().string("Error: User not found"))
                     .andDo(print());
         }
 

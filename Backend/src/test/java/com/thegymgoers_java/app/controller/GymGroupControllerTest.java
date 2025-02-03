@@ -254,7 +254,7 @@ public class GymGroupControllerTest {
             mockMvc.perform(post("/gymgroups/{username}/{groupName}", username, groupName)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().string("Failed to create GymGroup"))
+                    .andExpect(content().string("Failed to add user to GymGroup"))
                     .andDo(print());
         }
     }
