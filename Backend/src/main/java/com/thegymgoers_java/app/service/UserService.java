@@ -23,37 +23,6 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    public int getWorkoutsFromLast7Days(String username){
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
-        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        List<Workout> workoutWeek = user.getWorkoutsList().stream()
-                .filter(workout -> LocalDateTime.parse(workout.getDateCreated(), formatter).isAfter(sevenDaysAgo))
-                .collect(Collectors.toList());
-
-        return calculateTotalWeight(workoutWeek);
-    }
-
-    public int calculateTotalWeight(List<Workout> workoutList){
-        int result = 0;
-        for(Workout workout: workoutList){
-            for(Exercise exercise: workout.getExercises()){
-                if(!(exercise.getTime()>0)){
-                    int total = (exercise.getSets() * exercise.getReps() * exercise.getWeight());
-                    result = result + total;
-                }
-            }
-        }
-
-        return result;
-    }
-
-//    // Password encoder for hashing passwords
-//    private BCryptPasswordEncoder passwordEncoder;
-//
-//    @Autowired
-//    private UserRepository userRepository;
-
     // Password encoder for hashing passwords
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -190,5 +159,29 @@ public class UserService {
             throw new IllegalArgumentException("Workout not found");
         }
         return null;
+    }
+
+    public int getWorkoutsFromLast7Days(String username){
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        List<Workout> workoutWeek = user.getWorkoutsList().stream()
+                .filter(workout -> LocalDateTime.parse(workout.getDateCreated(), formatter).isAfter(sevenDaysAgo))
+                .collect(Collectors.toList());
+
+        return calculateTotalWeight(workoutWeek);
+    }
+
+    public int calculateTotalWeight(List<Workout> workoutList){
+        int result = 0;
+        for(Workout workout: workoutList){
+            for(Exercise exercise: workout.getExercises()){
+                if(!(exercise.getTime()>0)){
+                    int total = (exercise.getSets() * exercise.getReps() * exercise.getWeight());
+                    result = result + total;
+                }
+            }
+        }
+        return result;
     }
 }
