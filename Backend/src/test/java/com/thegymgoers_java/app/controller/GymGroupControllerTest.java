@@ -188,6 +188,46 @@ public class GymGroupControllerTest {
                     .andExpect(content().string("User not found"))
                     .andDo(print());
         }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturn400ForInvalidJson() throws Exception {
+            String invalidJson = "{ \"groupName\": \"testGroup\", \"username\": }"; // Invalid JSON
+
+            mockMvc.perform(post("/gymgroups/{username}", user.getUsername())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(invalidJson))
+                    .andExpect(status().isBadRequest())
+                    .andDo(print());
+        }
+
+        @Test
+        void shouldReturn401ForUnauthorizedAccess() throws Exception {
+            NewGymGroupRequest newGymGroupRequest = new NewGymGroupRequest();
+            newGymGroupRequest.setGroupName("testGroup");
+            newGymGroupRequest.setUsername("testname");
+
+            mockMvc.perform(post("/gymgroups/{username}", user.getUsername())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(newGymGroupRequest)))
+                    .andExpect(status().isUnauthorized())
+                    .andDo(print());
+        }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturn400ForNullGroupName() throws Exception {
+            NewGymGroupRequest newGymGroupRequest = new NewGymGroupRequest();
+            newGymGroupRequest.setGroupName(null);
+            newGymGroupRequest.setUsername("testname");
+
+            mockMvc.perform(post("/gymgroups/{username}", user.getUsername())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(newGymGroupRequest)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().json("{\"errors\":{\"groupName\":\"GymGroup must have a name\"}}"))
+                    .andDo(print());
+        }
     }
 
     @Nested

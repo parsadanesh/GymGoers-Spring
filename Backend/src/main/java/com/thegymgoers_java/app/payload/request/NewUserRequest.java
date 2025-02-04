@@ -1,5 +1,6 @@
 package com.thegymgoers_java.app.payload.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.util.Set;
@@ -10,6 +11,7 @@ public class NewUserRequest {
     private String username;
 
     @NotEmpty(message = "User needs an email address")
+    @Email
     private String emailAddress;
 
     @NotEmpty(message = "User needs a password")

@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -198,6 +199,42 @@ public class AuthControllerTests {
                     .andExpect(status().reason("Invalid request content."))
                     .andDo(print());
         }
+
+        @Test
+        void createUserWithInvalidEmailFormat() throws Exception {
+            newUserRequest.setEmailAddress("invalid-email");
+
+            mockMvc.perform(post("/api/auth/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(newUserRequest)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(status().reason("Invalid request content."))
+                    .andDo(print());
+        }
+
+        @Test
+        void createUserWithMissingPassword() throws Exception {
+            newUserRequest.setPassword(null);
+
+            mockMvc.perform(post("/api/auth/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(newUserRequest)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(status().reason("Invalid request content."))
+                    .andDo(print());
+        }
+
+        @Test
+        void createUserWithMissingEmail() throws Exception {
+            newUserRequest.setEmailAddress(null);
+
+            mockMvc.perform(post("/api/auth/signup")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(newUserRequest)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(status().reason("Invalid request content."))
+                    .andDo(print());
+        }
     }
 
     /**
@@ -273,6 +310,18 @@ public class AuthControllerTests {
                             .content(objectMapper.writeValueAsString(loginRequest)))
                     .andExpect(status().isBadRequest())
                     .andExpect(status().reason("Invalid request content."))
+                    .andDo(print());
+        }
+
+        @Test
+        void shouldReturn401ForInvalidJwtToken() throws Exception {
+            when(jwtUtils.validateJwtToken(anyString())).thenReturn(false);
+
+            mockMvc.perform(post("/api/auth/signin")
+                            .header("Authorization", "Bearer invalid-jwt-token")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(loginRequest)))
+                    .andExpect(status().isUnauthorized())
                     .andDo(print());
         }
 
