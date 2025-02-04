@@ -297,6 +297,19 @@ public class GymGroupControllerTest {
                     .andExpect(content().string("Failed to add user to GymGroup"))
                     .andDo(print());
         }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturn400ForInvalidGroupName() throws Exception {
+            String username = "testname";
+            String groupName = "";
+
+            mockMvc.perform(post("/gymgroups/{username}/{groupName}", username, groupName)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNotFound())
+                    .andExpect(status().reason("No static resource gymgroups/testname."))
+                    .andDo(print());
+        }
     }
 
     @Nested
@@ -343,6 +356,30 @@ public class GymGroupControllerTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isNotFound())
                     .andExpect(content().string("No GymGroups found"))
+                    .andDo(print());
+        }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturn400ForInvalidUsername() throws Exception {
+            String username = "";
+
+            mockMvc.perform(get("/gymgroups/{username}", username)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().string("Invalid username"))
+                    .andDo(print());
+        }
+
+        @Test
+        @WithMockUser(username = "testname", roles = { "USER" })
+        void shouldReturn400ForNullUsername() throws Exception {
+            String username = null;
+
+            mockMvc.perform(get("/gymgroups/{username}", username)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isNotFound())
+                    .andExpect(status().reason("No static resource gymgroups."))
                     .andDo(print());
         }
     }

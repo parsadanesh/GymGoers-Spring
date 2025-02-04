@@ -4,6 +4,7 @@ import com.thegymgoers_java.app.model.GymGroup;
 import com.thegymgoers_java.app.model.Workout;
 import com.thegymgoers_java.app.payload.request.NewGymGroupRequest;
 import com.thegymgoers_java.app.service.GymGroupService;
+import com.thegymgoers_java.app.util.ValidationUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,7 +67,13 @@ public class GymGroupController {
     @GetMapping("/gymgroups/{username}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> getGymGroups(@PathVariable String username){
-        return handleGetGymGroups(username);
+        try {
+            ValidationUtil.validateString(username);
+
+            return handleGetGymGroups(username);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     private ResponseEntity<?> handleGetGymGroups(String username) {
