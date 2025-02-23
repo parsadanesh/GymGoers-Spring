@@ -58,8 +58,8 @@ public class AuthControllerTests {
     @MockBean
     private JwtUtils jwtUtils;
 
-    @Autowired
-    private AuthController authController;
+//    @Autowired
+//    private AuthController authController;
 
     @MockBean
     UserRepository userRepository;
@@ -80,7 +80,7 @@ public class AuthControllerTests {
         initializeNewUserRequest();
         initializeLoginRequest();
         initializeUsers();
-        initializeMockMvc();
+//        initializeMockMvc();
     }
 
     private void initializeNewUserRequest() {
@@ -112,9 +112,9 @@ public class AuthControllerTests {
      * Initializes the MockMvc object for testing the AuthController.
      * This method sets up the MockMvc instance with the AuthController.
      */
-    private void initializeMockMvc() {
-        mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
-    }
+//    private void initializeMockMvc() {
+//        mockMvc = MockMvcBuilders.standaloneSetup(authController).build();
+//    }
 
     /**
      * This nested class contains unit tests for the registration functionality
@@ -141,7 +141,7 @@ public class AuthControllerTests {
         }
 
         @Test
-        void createUserWithSameUsername() throws Exception {
+        void createUserWithExistingUsername() throws Exception {
             // Mocking a user with the same email/username response
             when(userRepository.findByUsername(newUserRequest.getUsername())).thenReturn(Optional.of(user));
 
@@ -156,7 +156,7 @@ public class AuthControllerTests {
         }
 
         @Test
-        void createUserWithSameEmail() throws Exception {
+        void createUserWithExistingEmail() throws Exception {
             // Mocking a user with the same email/username response
             when(userRepository.findByEmailAddress(newUserRequest.getEmailAddress())).thenReturn(Optional.of(user));
 
@@ -171,11 +171,11 @@ public class AuthControllerTests {
         }
 
         @Test
-        void createUserWithNullUsername() throws Exception {
+        void createUserWithANullUsername() throws Exception {
             // Mocking a user with the same email/username response
             newUserRequest.setUsername(null);
-            // when(userRepository.findByUsername(newUserRequest.getUsername())).thenReturn(Optional.of(user));
-            // when(userRepository.save(user)).thenReturn(user);
+             when(userRepository.findByUsername(newUserRequest.getUsername())).thenReturn(Optional.of(user));
+             when(userRepository.save(user)).thenReturn(user);
 
             // Mocking a call to the api with registration with the same username
             // Asserting a unsuccessful 400 response
@@ -183,12 +183,12 @@ public class AuthControllerTests {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(newUserRequest)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(status().reason("Invalid request content."))
+                    .andExpect(jsonPath("$.errors.username").value("User needs a username"))
                     .andDo(print());
         }
 
         @Test
-        void creatingNullUser() throws Exception {
+        void creatingUserWithANullEmail() throws Exception {
             User newUser = new User("testuser", null, "fakepass");
 
             // Asserting a unsuccessful 400 response
@@ -196,7 +196,7 @@ public class AuthControllerTests {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(newUser)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(status().reason("Invalid request content."))
+                    .andExpect(jsonPath("$.errors.emailAddress").value("User needs an email address"))
                     .andDo(print());
         }
 
@@ -208,7 +208,7 @@ public class AuthControllerTests {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(newUserRequest)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(status().reason("Invalid request content."))
+                    .andExpect(jsonPath("$.errors.emailAddress").value("must be a well-formed email address"))
                     .andDo(print());
         }
 
@@ -220,7 +220,7 @@ public class AuthControllerTests {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(newUserRequest)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(status().reason("Invalid request content."))
+                    .andExpect(jsonPath("$.errors.password").value("User needs a password"))
                     .andDo(print());
         }
 
@@ -232,7 +232,7 @@ public class AuthControllerTests {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(newUserRequest)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(status().reason("Invalid request content."))
+                    .andExpect(jsonPath("$.errors.emailAddress").value("User needs an email address"))
                     .andDo(print());
         }
     }
@@ -309,7 +309,7 @@ public class AuthControllerTests {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(objectMapper.writeValueAsString(loginRequest)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(status().reason("Invalid request content."))
+                    .andExpect(jsonPath("$.errors.username").value("must not be empty"))
                     .andDo(print());
         }
 

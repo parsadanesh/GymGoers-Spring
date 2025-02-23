@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,19 +34,17 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final UserService userService;
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
 
     @Autowired
-    public AuthController(UserService userService,
+    public AuthController(
                           UserRepository userRepository,
                           PasswordEncoder encoder,
                           AuthenticationManager authenticationManager,
                           JwtUtils jwtUtils) {
-        this.userService = userService;
         this.userRepository = userRepository;
         this.encoder = encoder;
         this.authenticationManager = authenticationManager;
@@ -106,13 +105,15 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody NewUserRequest newUserRequest) {
 
-        // Checking if email/username is already taken
+
+        // Checking if username is already taken
         if (userRepository.findByUsername(newUserRequest.getUsername()).isPresent()) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
 
+        // Checking if email is already taken
         if (userRepository.findByEmailAddress(newUserRequest.getEmailAddress()).isPresent()) {
             return ResponseEntity
                     .badRequest()

@@ -13,7 +13,6 @@ public class Exercise {
     private String exerciseName;
 
     @JsonProperty("sets")
-//    @Positive
     private int sets;
 
     @JsonProperty("reps")

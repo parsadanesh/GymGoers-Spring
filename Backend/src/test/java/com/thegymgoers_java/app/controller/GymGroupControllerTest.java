@@ -362,12 +362,12 @@ public class GymGroupControllerTest {
         @Test
         @WithMockUser(username = "testname", roles = { "USER" })
         void shouldReturn400ForInvalidUsername() throws Exception {
-            String username = "";
+            String username = " ";
 
             mockMvc.perform(get("/gymgroups/{username}", username)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(content().string("Invalid username"))
+                    .andExpect(content().string("Details cannot be empty or null"))
                     .andDo(print());
         }
 

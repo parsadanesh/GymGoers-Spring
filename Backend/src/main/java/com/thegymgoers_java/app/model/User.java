@@ -3,6 +3,7 @@ package com.thegymgoers_java.app.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -22,10 +23,12 @@ public class User {
 
     @JsonProperty("username")
     @NotEmpty(message = "User needs a username")
+    @Indexed(unique = true)
     private String username;
 
     @JsonProperty("emailAddress")
     @NotEmpty(message = "User needs an email address")
+    @Indexed(unique = true)
     private String emailAddress;
 
     @JsonProperty("password")
