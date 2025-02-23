@@ -15,6 +15,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+/**
+ * Service for managing GymGroups.
+ *
+ * This service provides methods for creating, joining, and retrieving GymGroups.
+ * It handles the business logic and interacts with the repositories to perform
+ * CRUD operations on GymGroups and Users.
+ */
 @Service
 public class GymGroupService {
 

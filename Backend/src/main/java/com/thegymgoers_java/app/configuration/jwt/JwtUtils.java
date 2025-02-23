@@ -15,6 +15,15 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+/**
+ * Utility class for handling JSON Web Tokens (JWT).
+ *
+ * This class provides methods for generating, parsing, and validating JWT tokens.
+ * It uses the io.jsonwebtoken library to handle JWT operations.
+ *
+ * The class is annotated with @Component to indicate that it is a Spring-managed component.
+ * It retrieves the JWT secret and expiration time from the application properties.
+ */
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
@@ -25,6 +34,12 @@ public class JwtUtils {
     @Value("${gymgoer.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
+    /**
+     * Generates a JWT token for the authenticated user.
+     *
+     * @param authentication the authentication object containing user details
+     * @return the generated JWT token
+     */
     public String generateJwtToken(Authentication authentication) {
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
@@ -37,15 +52,32 @@ public class JwtUtils {
                 .compact();
     }
 
+    /**
+     * Retrieves the signing key for the JWT token.
+     *
+     * @return the signing key
+     */
     private Key key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
+    /**
+     * Extracts the username from the JWT token.
+     *
+     * @param token the JWT token
+     * @return the username extracted from the token
+     */
     public String getUserNameFromJwtToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key()).build()
                 .parseClaimsJws(token).getBody().getSubject();
     }
 
+    /**
+     * Validates the JWT token.
+     *
+     * @param authToken the JWT token to validate
+     * @return true if the token is valid, false otherwise
+     */
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parserBuilder().setSigningKey(key()).build().parse(authToken);

@@ -20,6 +20,15 @@ import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+
+
+/**
+ * Service for managing users.
+ *
+ * This service provides methods for registering, logging in, and managing user workouts.
+ * It handles the business logic and interacts with the repositories to perform
+ * CRUD operations on Users and Workouts.
+ */
 @Service
 public class UserService {
 
@@ -161,6 +170,12 @@ public class UserService {
         return null;
     }
 
+    /**
+     * Retrieves the total weight lifted in workouts from the last 7 days.
+     *
+     * @param username The username of the user.
+     * @return The total weight lifted.
+     */
     public int getWorkoutsFromLast7Days(String username){
         User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
         LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
@@ -172,6 +187,12 @@ public class UserService {
         return calculateTotalWeight(workoutWeek);
     }
 
+    /**
+     * Calculates the total weight lifted in a list of workouts.
+     *
+     * @param workoutList The list of workouts.
+     * @return The total weight lifted.
+     */
     public int calculateTotalWeight(List<Workout> workoutList){
         int result = 0;
         for(Workout workout: workoutList){

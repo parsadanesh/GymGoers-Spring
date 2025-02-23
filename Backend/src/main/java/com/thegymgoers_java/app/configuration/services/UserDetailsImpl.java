@@ -13,6 +13,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import com.thegymgoers_java.app.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * Implementation of the UserDetails interface.
+ *
+ * This class provides the user details required for Spring Security authentication and authorization.
+ * It includes user information such as username, email, password, and authorities (roles).
+ */
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 

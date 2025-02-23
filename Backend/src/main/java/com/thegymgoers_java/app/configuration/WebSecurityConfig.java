@@ -40,6 +40,7 @@ public class WebSecurityConfig {
         this.unauthorizedHandler = unauthorizedHandler;
     }
 
+
     /**
      * Creates a bean for the AuthTokenFilter which is responsible for filtering
      * and validating JWT tokens.
@@ -82,34 +83,79 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
+    /**
+     * Configures the security filter chain for the application.
+     *
+     * This method sets up the security configuration, including disabling CSRF protection,
+     * configuring CORS, handling exceptions, managing sessions, and setting authorization rules.
+     * It also adds a custom JWT authentication filter before the UsernamePasswordAuthenticationFilter.
+     *
+     * @param http the HttpSecurity object to configure
+     * @return the configured SecurityFilterChain
+     * @throws Exception if an error occurs while configuring the security filter chain
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // Disable CSRF protection as it is not needed for stateless APIs
         http.csrf(csrf -> csrf.disable())
+                // Configure CORS settings
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // Handle authentication exceptions
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+                // Set session management to stateless
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // Configure authorization rules
                 .authorizeHttpRequests(auth -> auth
+                        // Allow all requests to the /api/auth/** endpoints - login & signup
                         .requestMatchers("/api/auth/**").permitAll()
+                        // Require authentication for any other requests
                         .anyRequest().authenticated()
                 )
+                // Set the authentication provider
                 .authenticationProvider(authenticationProvider());
 
+        // Add the JWT authentication filter before the UsernamePasswordAuthenticationFilter
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
+        // Build and return the SecurityFilterChain
         return http.build();
     }
 
+
+    /**
+     * Creates a bean for the CorsFilter which is responsible for configuring
+     * Cross-Origin Resource Sharing (CORS) settings.
+     *
+     * This method sets up the CORS configuration to allow requests from specific origins,
+     * with any headers and methods, and allows credentials to be included in the requests.
+     *
+     * @return an instance of CorsFilter
+     */
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
+
+        // Allow credentials to be included in CORS requests
         config.setAllowCredentials(true);
+
+        // Allow requests from the specified origin
         config.addAllowedOrigin("https://thegymgoerapp.netlify.app");
+
+        // Allow any headers in CORS requests
         config.addAllowedHeader("*");
+
+        // Allow any HTTP methods in CORS requests
         config.addAllowedMethod("*");
+
+        // Register the CORS configuration for all paths
         source.registerCorsConfiguration("/**", config);
+
+        // Return the configured CorsFilter
         return new CorsFilter(source);
     }
+
 
     /**
      * Creates a bean for the UrlBasedCorsConfigurationSource which is
